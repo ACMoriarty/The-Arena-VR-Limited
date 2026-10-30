@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Admin — The Arena VR</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0D0D0F">
+<link rel="icon" href="../assets/logo/favicon.png" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/logo/favicon-192.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css?v=12">
+<link rel="stylesheet" href="../assets/css/admin.css?v=12">
+</head>
+<body class="admin">
+
+<main class="gate">
+  <div class="hero-glow" aria-hidden="true"><i class="g1"></i><i class="g2"></i></div>
+
+  <div class="gate-in">
+
+    <a class="gate-brand" href="../index.html" aria-label="The Arena home">
+      <img src="../assets/logo/logo-h-white.png" alt="The Arena">
+    </a>
+
+    <!-- ========== FIRST RUN: create the Director password ========== -->
+    <section id="setupView" hidden>
+      <h1>Set up the console</h1>
+      <p class="lead">No Director password exists on this device yet. Create one to get started —
+      the Director can then create logins for managers.</p>
+
+      <div class="pw-panel" style="margin:22px auto 0">
+        <div class="field">
+          <label for="newPw">Create Director password</label>
+          <input type="password" id="newPw" autocomplete="new-password" placeholder="At least 8 characters">
+          <span class="hint">Use something long. There is no "forgot password" — see the note below.</span>
+        </div>
+        <div class="field">
+          <label for="newPw2">Confirm password</label>
+          <input type="password" id="newPw2" autocomplete="new-password">
+        </div>
+        <p class="err" id="setupErr" style="display:none"></p>
+        <button class="btn btn-primary btn-block" id="setupBtn"><span>Create password</span></button>
+      </div>
+    </section>
+
+    <!-- ========== ROLE CHOICE ========== -->
+    <section id="chooseView" hidden style="width:100%">
+      <h1>Administrator access</h1>
+      <p class="lead" style="margin:12px auto 0">Choose your view. Each one needs its own password.</p>
+
+      <div class="rolecards" style="margin-top:26px">
+
+        <div class="rolecard mgr" data-card="manager">
+          <span class="rc-ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20v-1.6A4.4 4.4 0 0 1 7.4 14h4.2a4.4 4.4 0 0 1 4.4 4.4V20"/><circle cx="9.5" cy="7.5" r="3.5"/><path d="M17 11.5a3 3 0 1 0-1.6-5.5M18 20v-1.6a4.3 4.3 0 0 0-1.4-3.2"/></svg>
+          </span>
+          <h2>Manager's View</h2>
+          <p>For the business &amp; operations manager.</p>
+          <ul>
+            <li>All bookings, every category</li>
+            <li>Customer details and history</li>
+            <li>Engagement and analytics</li>
+          </ul>
+          <button type="button" class="btn btn-cyan" data-role="manager"><span>Open Manager's View</span></button>
+        </div>
+
+        <div class="rolecard dir" data-card="director">
+          <span class="rc-ico">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.9-4.7 4.6 1.1 6.4-5.8-3-5.8 3 1.1-6.4L2.6 9.4l6.5-.9z"/></svg>
+          </span>
+          <h2>Director's View</h2>
+          <p>Super user. Everything the manager sees, plus the money.</p>
+          <ul>
+            <li>Revenue, best lines and top customers</li>
+            <li>Cost register and expenses</li>
+            <li>Add and remove managers</li>
+            <li>Passwords and settings</li>
+          </ul>
+          <button type="button" class="btn btn-primary" data-role="director"><span>Open Director's View</span></button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========== PASSWORD PROMPT ========== -->
+    <section id="loginView" hidden>
+      <div class="pw-panel">
+        <h2 id="loginTitle">Manager's View</h2>
+        <p style="font-size:14px" id="loginBlurb">Enter the password to continue.</p>
+        <div class="field" id="emailField" hidden>
+          <label for="loginEmail">Email</label>
+          <input type="email" id="loginEmail" autocomplete="username" inputmode="email" enterkeyhint="next">
+        </div>
+        <div class="field">
+          <label for="pw">Password</label>
+          <input type="password" id="pw" autocomplete="current-password" enterkeyhint="go">
+          <span class="err" id="loginErr" style="display:none">That password is not right.</span>
+        </div>
+        <div class="pw-row">
+          <button class="btn btn-ghost" id="backBtn"><span>Back</span></button>
+          <button class="btn btn-primary" id="goBtn"><span>Sign in</span></button>
+        </div>
+        <p class="hint" id="noManagers" style="display:none">
+          No manager accounts exist yet. The Director creates them in
+          <b>Director's View → Managers</b>.
+        </p>
+      </div>
+    </section>
+
+    <div class="security-note">
+      <span>⚠</span>
+      <span><b>Please read.</b> This site has no server, so this password check runs in your
+      browser and is a deterrent, not real security — someone technical can bypass it.
+      Accounts and data are stored in <b>this browser only</b>. Don't treat it as a vault for
+      anything truly sensitive. The README explains how to move to a proper server login.</span>
+    </div>
+
+    <a class="linkbtn" href="../index.html">← Back to the website</a>
+  </div>
+</main>
+
+<div class="atoast" id="atoast" role="status" aria-live="polite"></div>
+
+<script src="../assets/js/arena.config.js?v=12"></script>
+<script src="../assets/js/arena.cloud.js?v=12"></script>
+<script src="../assets/js/admin.auth.js?v=12"></script>
+<script>
+(function () {
+  'use strict';
+  var $ = function (s) { return document.querySelector(s); };
+  var Auth = window.ArenaAuth;
+  var role = null;
+
+  function show(which) {
+    ['setupView', 'chooseView', 'loginView'].forEach(function (id) {
+      $('#' + id).hidden = id !== which;
+    });
+  }
+
+  function toast(msg, kind) {
+    var t = $('#atoast');
+    t.textContent = msg;
+    t.className = 'atoast show' + (kind ? ' ' + kind : '');
+    setTimeout(function () { t.className = 'atoast'; }, 3000);
+  }
+
+  var CLOUD = Auth.cloudMode();
+
+  /* ---------- first run ---------- */
+  function boot() {
+    if (!CLOUD && !Auth.isSetUp()) { show('setupView'); $('#newPw').focus(); }
+    else show('chooseView');
+  }
+
+  /* In cloud mode the password is checked by the server, so the warning
+     about this being "only a deterrent" no longer applies. */
+  if (CLOUD) {
+    var note = document.querySelector('.security-note');
+    note.className = 'security-note ok';
+    note.innerHTML = '<span>&#128274;</span><span><b>Secure sign-in.</b> ' +
+      'Accounts are checked by the server, so they work on any device and the ' +
+      'password genuinely protects the data.</span>';
+  }
+
+  $('#setupBtn').addEventListener('click', function () {
+    var a = $('#newPw').value, b = $('#newPw2').value;
+    var err = $('#setupErr');
+    err.style.display = 'none';
+    if (a.length < 8) { err.textContent = 'Use at least 8 characters.'; err.style.display = 'block'; return; }
+    if (a !== b) { err.textContent = 'The two passwords do not match.'; err.style.display = 'block'; return; }
+    this.disabled = true;
+    Auth.setDirectorPassword(a).then(function () {
+      toast('Director password created', 'good');
+      $('#newPw').value = $('#newPw2').value = '';
+      show('chooseView');
+    }).finally(function () { $('#setupBtn').disabled = false; });
+  });
+
+  /* ---------- role choice ---------- */
+  // the whole card is a click target, forwarding to its own button
+  Array.prototype.forEach.call(document.querySelectorAll('[data-card]'), function (card) {
+    card.addEventListener('click', function (e) {
+      if (e.target.closest('[data-role]')) return;   // the button handles itself
+      card.querySelector('[data-role]').click();
+    });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-role]'), function (card) {
+    card.addEventListener('click', function () {
+      role = card.getAttribute('data-role');
+      $('#loginTitle').textContent = role === 'director' ? "Director's View" : "Manager's View";
+      $('#loginBlurb').textContent = role === 'director'
+        ? 'Enter the Director password to continue.'
+        : 'Enter your manager password to continue.';
+      $('#noManagers').style.display =
+        (!CLOUD && role === 'manager' && !Auth.hasManagers()) ? 'block' : 'none';
+      $('#emailField').hidden = !CLOUD;
+      $('#loginErr').style.display = 'none';
+      $('#pw').value = '';
+      show('loginView');
+      (CLOUD ? $('#loginEmail') : $('#pw')).focus();
+    });
+  });
+
+  $('#backBtn').addEventListener('click', function () { show('chooseView'); });
+
+  function fail(msg) {
+    $('#loginErr').textContent = msg;
+    $('#loginErr').style.display = 'block';
+    $('#pw').select();
+  }
+
+  function attempt() {
+    var pw = $('#pw').value;
+    if (!pw) return;
+    var btn = $('#goBtn');
+    btn.disabled = true;
+    $('#loginErr').style.display = 'none';
+
+    if (CLOUD) {
+      var email = $('#loginEmail').value.trim();
+      if (!email) { fail('Enter your email address.'); btn.disabled = false; return; }
+      Auth.signInCloud(email, pw).then(function (res) {
+        if (!res.ok) { fail(res.error); return; }
+        if (role === 'director' && res.role !== 'director') {
+          fail('This account is not a Director account.');
+          return Auth.signOut();
+        }
+        location.href = res.role === 'director' && role === 'director'
+          ? 'director.html' : 'manager.html';
+      }).finally(function () { btn.disabled = false; });
+      return;
+    }
+
+    var check = role === 'director' ? Auth.verifyDirector(pw) : Auth.verifyManager(pw);
+    check.then(function (ok) {
+      if (ok) {
+        location.href = role === 'director' ? 'director.html' : 'manager.html';
+      } else {
+        fail(role === 'manager' && !Auth.hasManagers()
+          ? 'There are no manager accounts on this device yet.'
+          : 'That password is not right.');
+      }
+    }).finally(function () { btn.disabled = false; });
+  }
+
+  $('#goBtn').addEventListener('click', attempt);
+  $('#pw').addEventListener('keydown', function (e) { if (e.key === 'Enter') attempt(); });
+  $('#loginEmail').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('#pw').focus(); });
+  $('#newPw2').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('#setupBtn').click(); });
+
+  // if a session is already live, go straight through
+  var s = Auth.session();
+  if (s && s.role) {
+    location.replace(s.role === 'director' ? 'director.html' : 'manager.html');
+  } else {
+    boot();
+  }
+}());
+</script>
+</body>
+</html>

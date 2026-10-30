@@ -1,0 +1,112 @@
+# ===========================================================================
+# THE ARENA VR — website
+# ===========================================================================
+
+# ---------------------------------------------------------------------------
+# Secrets
+# ---------------------------------------------------------------------------
+# Nothing in this site reads .env today (it is static, with no build step).
+# These are here for the day you add the Paystack webhook or any other
+# server-side piece — that is when real secrets start existing.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*secret*
+*service-role*
+*service_role*
+
+# NOTE — do NOT ignore assets/js/arena.config.js.
+# It holds the Paystack PUBLIC key and the Supabase ANON key, both of which are
+# designed to be published and are required for the site to work. The keys that
+# must never be committed are the Paystack `sk_...` secret key and the Supabase
+# `service_role` key — neither belongs in this folder at all.
+
+# ---------------------------------------------------------------------------
+# Notes and scratch work
+# ---------------------------------------------------------------------------
+notes
+notes/
+NOTES/
+notes.*
+*-notes.*
+*.notes
+TODO
+TODO.*
+todo.*
+scratch/
+scratch.*
+draft/
+drafts/
+*.draft
+*.bak
+*.orig
+*.tmp
+*~
+
+# Local backups of the admin accounts export (contains password hashes)
+arena-admin-accounts*.json
+
+# CSV exports pulled out of the dashboards
+arena-bookings*.csv
+arena-customers*.csv
+arena-expenses*.csv
+
+# ---------------------------------------------------------------------------
+# OS junk
+# ---------------------------------------------------------------------------
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# OneDrive leftovers
+*.tmp.~*
+~$*
+
+# macOS
+.DS_Store
+.DS_Store?
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.DocumentRevisions-V100
+.fseventsd
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+
+# Linux
+.directory
+.Trash-*
+.nfs*
+.fuse_hidden*
+
+# ---------------------------------------------------------------------------
+# Editors
+# ---------------------------------------------------------------------------
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.sublime-workspace
+*.swp
+*.swo
+
+# ---------------------------------------------------------------------------
+# Tooling (only if you add a build step or a serverless function later)
+# ---------------------------------------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-error.log*
+*.log
+.cache/
+dist/
+.netlify/
+.vercel/
+.supabase/

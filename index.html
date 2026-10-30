@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Arena VR — Play. Relax. Connect. | Benin City</title>
+<meta name="description" content="Nigeria's immersive gaming lounge in Benin City. 360° free-roam VR, motorcycle simulators, PS5, Meta Quest and karaoke. Book your session and pay online. 85 Boundary Road, GRA, Benin City.">
+<meta name="theme-color" content="#0D0D0F">
+<link rel="icon" href="assets/logo/favicon.png" type="image/png" sizes="512x512">
+<link rel="icon" href="assets/logo/favicon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/logo/favicon-192.png">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Arena VR — Play. Relax. Connect.">
+<meta property="og:description" content="360° free-roam VR, motorcycle simulators, PS5, Meta Quest and karaoke in Benin City. Book online.">
+<meta property="og:image" content="assets/img/vr360.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=11">
+</head>
+<body>
+
+<!-- ===================== PRELOADER ===================== -->
+<div id="preloader">
+  <div class="pl-inner">
+    <svg class="pl-hex" viewBox="0 0 200 200" aria-hidden="true">
+      <path class="o" d="M100 12 L176 56 L176 144 L100 188 L24 144 L24 56 Z"/>
+      <path class="m" d="M100 48 L145 74 L145 126 L100 152 L55 126 L55 74 Z"/>
+      <path class="i" d="M100 78 L122 91 L122 117 L100 130 L78 117 L78 91 Z"/>
+    </svg>
+    <div class="pl-bar"><i></i></div>
+    <div class="pl-txt">Entering the arena</div>
+  </div>
+</div>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="index.html" aria-label="The Arena home">
+      <img src="assets/logo/logo-h-white.png" alt="The Arena">
+    </a>
+
+    <nav class="nav-links">
+      <a href="#play">Play</a>
+      <a href="#games">Games</a>
+      <a href="#events">Events</a>
+      <a href="#how">How it works</a>
+      <a href="#visit">Visit</a>
+    </nav>
+
+    <div class="nav-cta">
+      <a class="nav-phone" href="tel:+2348067289880" id="navPhone">
+        08067289880 <small>Call or WhatsApp</small>
+      </a>
+      <a class="btn btn-primary btn-sm" href="book.html"><span>Book to play</span></a>
+      <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="drawer">
+        <i></i><i></i><i></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" id="drawer">
+  <a href="#play">Play</a>
+  <a href="#games">Games</a>
+  <a href="#events">Events</a>
+  <a href="#how">How it works</a>
+  <a href="#visit">Visit</a>
+  <div class="drawer-foot">
+    <a class="btn btn-primary btn-block" href="book.html"><span>Book to play</span></a>
+    <a class="btn btn-ghost btn-block" href="tel:+2348067289880"><span>Call 08067289880</span></a>
+  </div>
+</div>
+
+<main>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <canvas id="hexfield" aria-hidden="true"></canvas>
+  <div class="hero-glow" aria-hidden="true"><i class="g1"></i><i class="g2"></i><i class="g3"></i></div>
+
+  <div class="hero-in">
+    <div class="hero-grid">
+      <div>
+        <span class="tag live hero-fade" id="openTag" style="animation-delay:.05s"><i class="dot"></i> <span id="openStatus">Boundary Road, GRA</span></span>
+
+        <h1 class="h-xl">
+          <span class="line"><span>Escape</span></span>
+          <span class="line"><span class="grad-fire">reality.</span></span>
+          <span class="line"><span class="outline-txt">Enter the arena.</span></span>
+        </h1>
+
+        <p class="lead hero-sub hero-fade">Benin City's immersive gaming lounge. Step into 360° free-roam VR,
+        lean into a motion motorcycle, take the pad on PS5, strap on a Meta Quest — or take the mic and
+        let the room hear it. Pick your game, book your slot, pay online in under a minute.</p>
+
+        <div class="hero-ctas hero-fade d2">
+          <a class="btn btn-primary btn-lg" href="book.html">
+            <span>Book to play</span>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn-ghost btn-lg" href="#play"><span>See the floor</span></a>
+        </div>
+
+        <div class="hero-stats hero-fade d3">
+          <div><b>5</b><span>Ways to play</span></div>
+          <div><b id="statGames">50+</b><span>Games loaded</span></div>
+          <div><b>Fri</b><span>FIFA tournament night</span></div>
+          <div><b id="statFrom">—</b><span>Sessions from</span></div>
+        </div>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+        <div class="core"><img src="assets/logo/icon.png" alt=""></div>
+        <div class="orb"></div><div class="orb c"></div><div class="orb y"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-cue" aria-hidden="true"><span>Scroll</span><i></i></div>
+</section>
+
+<!-- ===================== MARQUEE ===================== -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Game on!</span><span>Play loud!</span><span>Get ready!</span><span>Escape reality</span><span>Let's play!</span><span>Jumbo!</span>
+    <span>Game on!</span><span>Play loud!</span><span>Get ready!</span><span>Escape reality</span><span>Let's play!</span><span>Jumbo!</span>
+  </div>
+</div>
+
+<!-- ===================== EXPERIENCES ===================== -->
+<section class="section" id="play">
+  <div class="shell">
+    <div class="sec-head row" data-reveal>
+      <div>
+        <span class="eyebrow">Five ways to play</span>
+        <h2 class="h-lg" style="margin-top:16px">Pick your <span class="grad-fire">arena</span></h2>
+        <p class="lead" style="margin-top:14px">Every station is bookable by the block, every block lets you choose
+        the exact game you want loaded before you arrive. Walk in and it's already running.</p>
+      </div>
+      <a class="btn btn-ghost" href="book.html"><span>Book any station</span></a>
+    </div>
+
+    <div class="zones" id="zones"><!-- built by site.js --></div>
+  </div>
+</section>
+
+<!-- ===================== GAME PICKER ===================== -->
+<section class="section" id="games" style="padding-top:0">
+  <div class="shell">
+    <div class="sec-head" data-reveal>
+      <span class="eyebrow cy">The catalogue</span>
+      <h2 class="h-lg" style="margin-top:16px">Choose the exact game</h2>
+      <p class="lead">No queueing at the desk to explain what you want. Tell us here, and the station is
+      set up and waiting when you walk in.</p>
+    </div>
+
+    <div class="picker" data-reveal>
+      <div class="picker-tabs" id="pickerTabs" role="tablist"></div>
+      <div id="pickerPanels"></div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee alt" aria-hidden="true" style="margin-top:0">
+  <div class="marquee-track">
+    <span>FIFA Fridays</span><span>Karaoke Challenge</span><span>Free-roam VR</span><span>Motion bikes</span><span>PS5</span><span>Meta Quest</span>
+    <span>FIFA Fridays</span><span>Karaoke Challenge</span><span>Free-roam VR</span><span>Motion bikes</span><span>PS5</span><span>Meta Quest</span>
+  </div>
+</div>
+
+<!-- ===================== EVENTS ===================== -->
+<section class="section" id="events">
+  <div class="shell">
+    <div class="sec-head" data-reveal>
+      <span class="eyebrow">Put it in the diary</span>
+      <h2 class="h-lg" style="margin-top:16px">Nights worth showing up for</h2>
+      <p class="lead">Two standing fixtures. Both physical sessions, both at 85 Boundary Road, both a lot
+      louder than they sound on paper.</p>
+    </div>
+
+    <div class="events">
+
+      <article class="event fifa" data-reveal>
+        <span class="tag"><i class="dot"></i> <span id="fifaCadence">Every Friday</span> · <span id="fifaTime">6:00pm</span></span>
+        <h3>Arena FIFA<br>Tournament</h3>
+        <p id="fifaFormat">Single elimination.</p>
+
+        <div>
+          <p class="mono" style="margin-bottom:10px">Next whistle in</p>
+          <div class="countdown" data-countdown="fifa">
+            <div class="cd-cell"><b data-d>00</b><span>Days</span></div>
+            <div class="cd-cell"><b data-h>00</b><span>Hrs</span></div>
+            <div class="cd-cell"><b data-m>00</b><span>Mins</span></div>
+            <div class="cd-cell"><b data-s>00</b><span>Secs</span></div>
+          </div>
+        </div>
+
+        <ul class="event-list" id="fifaBullets"></ul>
+
+        <div class="zone-foot" style="margin-top:6px">
+          <div class="zone-price" id="fifaPrice">—<small>Entry per player</small></div>
+          <a class="btn btn-primary" href="book.html?event=fifa">
+            <span>Join the FIFA tournament</span>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </article>
+
+      <article class="event karaoke" data-reveal data-delay="120">
+        <span class="tag"><i class="dot" style="background:var(--cyan)"></i> <span id="karCadence">Monthly</span> · <span id="karTime">7:00pm</span></span>
+        <h3>Karaoke<br>Challenge</h3>
+        <p id="karFormat">Two rounds, judged on crowd reaction.</p>
+
+        <div>
+          <p class="mono" style="margin-bottom:10px">Next challenge in</p>
+          <div class="countdown" data-countdown="karaoke">
+            <div class="cd-cell"><b data-d>00</b><span>Days</span></div>
+            <div class="cd-cell"><b data-h>00</b><span>Hrs</span></div>
+            <div class="cd-cell"><b data-m>00</b><span>Mins</span></div>
+            <div class="cd-cell"><b data-s>00</b><span>Secs</span></div>
+          </div>
+        </div>
+
+        <ul class="event-list" id="karBullets"></ul>
+
+        <div class="zone-foot" style="margin-top:6px">
+          <div class="zone-price" id="karPrice">—<small>Entry per singer</small></div>
+          <a class="btn btn-cyan" href="book.html?event=karaoke">
+            <span>Enter the Karaoke Challenge</span>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HOW IT WORKS ===================== -->
+<section class="section" id="how" style="padding-top:0">
+  <div class="shell">
+    <div class="sec-head" data-reveal>
+      <span class="eyebrow">Three steps</span>
+      <h2 class="h-lg" style="margin-top:16px">Booked in a minute</h2>
+    </div>
+    <div class="steps">
+      <article class="step" data-reveal>
+        <h3>Pick your station and your game</h3>
+        <p>360° VR, motion motorcycle, PS5, Meta Quest or the karaoke room — then choose the exact title
+        or playlist you want loaded.</p>
+      </article>
+      <article class="step" data-reveal data-delay="110">
+        <h3>Choose your slot</h3>
+        <p>Date, start time, how long you're playing and how many of you are coming. Prices update live
+        as you go.</p>
+      </article>
+      <article class="step" data-reveal data-delay="220">
+        <h3>Pay online, walk straight in</h3>
+        <p>Card, bank transfer or USSD through Paystack. You get a booking reference — show it at the
+        desk and your station is already running.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== VISIT ===================== -->
+<section class="section" id="visit">
+  <div class="shell">
+    <div class="visit">
+      <div data-reveal>
+        <span class="eyebrow">Find us</span>
+        <h2 class="h-lg" style="margin-top:16px">85 Boundary Road,<br>GRA, Benin City</h2>
+        <p class="lead" style="margin-top:16px">Walk-ins welcome when there's a station free — but Friday
+        nights and weekends fill up. Booking ahead is the safe play.</p>
+
+        <dl class="info-rows" id="infoRows"></dl>
+
+        <div class="hero-ctas" style="margin-top:26px">
+          <a class="btn btn-primary" id="waBtn" href="#" target="_blank" rel="noopener">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.8-.9-2-1s-.5-.2-.7.1-.8 1-1 1.2-.4.2-.7 0a8.2 8.2 0 0 1-2.4-1.5 9 9 0 0 1-1.7-2.1c-.2-.3 0-.5.1-.6l.5-.6a2 2 0 0 0 .3-.5.6.6 0 0 0 0-.6L9 6.6c-.2-.5-.4-.5-.6-.5h-.6a1.1 1.1 0 0 0-.8.4A3.3 3.3 0 0 0 6 8.9a5.8 5.8 0 0 0 1.2 3 13.1 13.1 0 0 0 5 4.4 9.9 9.9 0 0 0 3.4.9 2.9 2.9 0 0 0 2-.7 2.4 2.4 0 0 0 .6-1.7c0-.2-.1-.3-.4-.4zM12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2z"/></svg>
+            <span>Chat on WhatsApp</span>
+          </a>
+          <a class="btn btn-ghost" id="callBtn" href="tel:+2348067289880"><span>Call 08067289880</span></a>
+        </div>
+      </div>
+
+      <div class="map-card" data-reveal="right">
+        <iframe
+          title="The Arena, 85 Boundary Road, GRA, Benin City"
+          src="https://www.google.com/maps?q=85%20Boundary%20Road%2C%20GRA%2C%20Benin%20City&output=embed"
+          loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <div class="map-badge">
+          <b>The Arena VR Limited</b>
+          <span>85 Boundary Road, GRA, Benin City</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA BAND ===================== -->
+<section class="section" style="padding-top:0">
+  <div class="shell">
+    <div class="event fifa" style="text-align:center;justify-items:center" data-reveal>
+      <span class="eyebrow">Play · Relax · Connect</span>
+      <h2 class="h-lg">The floor is open.</h2>
+      <p class="lead" style="max-width:52ch">Pick a station, pick a game, pick a time. We'll have it
+      warmed up before you get here.</p>
+      <div class="hero-ctas" style="justify-content:center">
+        <a class="btn btn-primary btn-lg" href="book.html"><span>Book to play</span></a>
+        <a class="btn btn-ghost btn-lg" href="book.html?event=fifa"><span>FIFA Friday</span></a>
+        <a class="btn btn-ghost btn-lg" href="book.html?event=karaoke"><span>Karaoke Challenge</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="shell">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <img src="assets/logo/logo-slogan-white.png" alt="The Arena — Play. Relax. Connect.">
+        <p style="font-size:14px;max-width:34ch">Benin City's immersive gaming lounge. Built for people who
+        still believe you're never too old to play.</p>
+      </div>
+      <div>
+        <h4>Play</h4>
+        <ul id="footPlay"></ul>
+      </div>
+      <div>
+        <h4>The Arena</h4>
+        <ul>
+          <li><a href="#events">FIFA Tournament</a></li>
+          <li><a href="#events">Karaoke Challenge</a></li>
+          <li><a href="#how">How booking works</a></li>
+          <li><a href="#visit">Visit us</a></li>
+          <li><a href="book.html">Book a session</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Get in touch</h4>
+        <ul id="footContact"></ul>
+        <div class="socials" style="margin-top:16px" id="socials"></div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>&copy; <span id="year"></span> The Arena VR Limited. All rights reserved.</span>
+      <span>85 Boundary Road, GRA, Benin City · Edo State, Nigeria</span>
+    </div>
+  </div>
+</footer>
+
+<a class="wa-float" id="waFloat" href="#" target="_blank" rel="noopener" aria-label="Chat with The Arena on WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.2-1.8-.9-2-1s-.5-.2-.7.1-.8 1-1 1.2-.4.2-.7 0a8.2 8.2 0 0 1-2.4-1.5 9 9 0 0 1-1.7-2.1c-.2-.3 0-.5.1-.6l.5-.6a2 2 0 0 0 .3-.5.6.6 0 0 0 0-.6L9 6.6c-.2-.5-.4-.5-.6-.5h-.6a1.1 1.1 0 0 0-.8.4A3.3 3.3 0 0 0 6 8.9a5.8 5.8 0 0 0 1.2 3 13.1 13.1 0 0 0 5 4.4 9.9 9.9 0 0 0 3.4.9 2.9 2.9 0 0 0 2-.7 2.4 2.4 0 0 0 .6-1.7c0-.2-.1-.3-.4-.4zM12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2z"/></svg>
+</a>
+
+<script src="assets/js/arena.config.js?v=11"></script>
+<script src="assets/js/site.js?v=11"></script>
+</body>
+</html>

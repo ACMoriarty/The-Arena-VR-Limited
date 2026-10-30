@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Director's View — The Arena VR</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0D0D0F">
+<link rel="icon" href="../assets/logo/favicon.png" type="image/png" sizes="512x512">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css?v=12">
+<link rel="stylesheet" href="../assets/css/admin.css?v=12">
+</head>
+<body class="admin">
+
+<div class="aconsole">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="asidebar" id="asidebar">
+    <div class="abrand">
+      <img src="../assets/logo/logo-h-white.png" alt="The Arena">
+      <span class="arole dir">Director</span>
+    </div>
+
+    <nav class="anav">
+      <h4>Operations</h4>
+      <a href="#overview" data-sec="overview" data-title="Overview">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="8.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="5" rx="2"/><rect x="13.5" y="10.5" width="7.5" height="10.5" rx="2"/><rect x="3" y="14" width="7.5" height="7" rx="2"/></svg>
+        Overview
+      </a>
+      <a href="#bookings" data-sec="bookings" data-title="All bookings">
+        <svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="16" rx="3"/><path d="M3.5 9.5h17M8 2.5v4M16 2.5v4"/></svg>
+        Bookings
+      </a>
+      <a href="#customers" data-sec="customers" data-title="Customers">
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.6"/><path d="M2.5 20v-1.4A4.6 4.6 0 0 1 7.1 14h3.8a4.6 4.6 0 0 1 4.6 4.6V20"/><path d="M16.5 11.6a3.2 3.2 0 1 0-1.7-5.9M21.5 20v-1.4a4.5 4.5 0 0 0-1.6-3.4"/></svg>
+        Customers
+      </a>
+      <a href="#engagement" data-sec="engagement" data-title="Engagement &amp; analytics">
+        <svg viewBox="0 0 24 24"><path d="M3.5 17.5l5-5.5 4 3.5 8-9"/><path d="M15.5 6.5h5v5"/></svg>
+        Engagement
+      </a>
+
+      <h4>Money</h4>
+      <a href="#revenue" data-sec="revenue" data-title="Revenue &amp; performance">
+        <svg viewBox="0 0 24 24"><path d="M12 2.5v19M16.5 6.5H9.8a3.3 3.3 0 0 0 0 6.6h4.4a3.3 3.3 0 0 1 0 6.6H7"/></svg>
+        Revenue
+      </a>
+      <a href="#costs" data-sec="costs" data-title="Cost register &amp; expenses">
+        <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="15" rx="3"/><path d="M3 10h18M7.5 15h4"/></svg>
+        Costs &amp; expenses
+      </a>
+
+      <h4>Administration</h4>
+      <a href="#managers" data-sec="managers" data-title="Managers">
+        <svg viewBox="0 0 24 24"><circle cx="10" cy="8" r="3.6"/><path d="M3 20v-1.4A4.6 4.6 0 0 1 7.6 14h4.8"/><path d="M18 14v6M15 17h6"/></svg>
+        Managers
+      </a>
+      <a href="#settings" data-sec="settings" data-title="Settings">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 14.5a1.7 1.7 0 0 0 .34 1.88l.06.06a2 2 0 1 1-2.84 2.84l-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1 1.56V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06a2 2 0 1 1-2.84-2.84l.06-.06a1.7 1.7 0 0 0 .34-1.88 1.7 1.7 0 0 0-1.56-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.56-1.1 1.7 1.7 0 0 0-.34-1.88l-.06-.06a2 2 0 1 1 2.84-2.84l.06.06a1.7 1.7 0 0 0 1.88.34H9a1.7 1.7 0 0 0 1-1.56V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06a2 2 0 1 1 2.84 2.84l-.06.06a1.7 1.7 0 0 0-.34 1.88V9a1.7 1.7 0 0 0 1.56 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.56 1z"/></svg>
+        Settings
+      </a>
+    </nav>
+
+    <div class="afoot">
+      <a class="btn btn-ghost btn-sm btn-block" href="../index.html"><span>View website</span></a>
+      <button class="btn btn-ghost btn-sm btn-block" id="signOut"><span>Sign out</span></button>
+    </div>
+  </aside>
+  <div id="ascrim"></div>
+
+  <!-- ============ MAIN ============ -->
+  <div class="amain">
+    <header class="atop">
+      <button class="aburger" id="aburger" aria-label="Menu"><i></i><i></i><i></i></button>
+      <h1 id="secTitle">Overview</h1>
+      <span class="mono">Signed in as Director</span>
+    </header>
+
+    <div class="abody">
+
+      <div class="cfg-note" id="dataSource" style="display:none"></div>
+
+      <div class="cfg-note" id="sampleBanner" style="display:none">
+        <span>⚠</span>
+        <span><b>Sample data is loaded.</b> Rows marked <em>Sample</em> are made up for demonstration.
+        Remove them in <b>Settings</b> when you go live.</span>
+      </div>
+
+      <div id="filterBar"></div>
+
+      <!-- OVERVIEW -->
+      <section class="asection" id="sec-overview">
+        <div class="kpirow" id="kpiOverview"></div>
+        <div class="grid2" style="margin-top:20px">
+          <div class="acard">
+            <header><h3>Bookings per day</h3><span class="hint">Selected period</span></header>
+            <div class="chart" id="chartVolume"></div>
+          </div>
+          <div class="acard">
+            <header><h3>By category</h3><span class="hint">Which lines are busy</span></header>
+            <div id="chartLines"></div>
+          </div>
+        </div>
+        <div class="acard" style="margin-top:20px">
+          <header><h3>Bookings by weekday</h3><span class="hint">Where to put staff</span></header>
+          <div class="chart" id="chartWeekday"></div>
+        </div>
+      </section>
+
+      <!-- BOOKINGS -->
+      <section class="asection" id="sec-bookings" hidden>
+        <div class="acard">
+          <header>
+            <h3>All bookings</h3>
+            <span class="hint" id="bookingsCount"></span>
+            <button class="btn btn-ghost btn-sm" id="exportBookings"><span>Export CSV</span></button>
+          </header>
+          <div id="bookingsTable"></div>
+        </div>
+      </section>
+
+      <!-- CUSTOMERS -->
+      <section class="asection" id="sec-customers" hidden>
+        <div class="kpirow" id="kpiCustomers"></div>
+        <div class="acard" style="margin-top:20px">
+          <header>
+            <h3>Customer list</h3>
+            <span class="hint">Ranked by spend</span>
+            <button class="btn btn-ghost btn-sm" id="exportCustomers"><span>Export CSV</span></button>
+          </header>
+          <div id="customersTable"></div>
+        </div>
+      </section>
+
+      <!-- ENGAGEMENT -->
+      <section class="asection" id="sec-engagement" hidden>
+        <div class="kpirow" id="kpiEngagement"></div>
+        <div class="acard" style="margin-top:20px">
+          <header><h3>When people start</h3><span class="hint">Booking start times</span></header>
+          <div class="chart" id="chartHours"></div>
+        </div>
+        <div class="grid2" style="margin-top:20px">
+          <div class="acard">
+            <header><h3>Where they come from</h3><span class="hint">Area of Benin</span></header>
+            <div id="chartAreas"></div>
+          </div>
+          <div class="acard">
+            <header><h3>Most requested games</h3><span class="hint">Top 10</span></header>
+            <div id="chartGames"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- REVENUE -->
+      <section class="asection" id="sec-revenue" hidden>
+        <div class="kpirow" id="kpiRevenue"></div>
+
+        <div class="acard" style="margin-top:20px">
+          <header><h3>Revenue per day</h3><span class="hint">Selected period</span></header>
+          <div class="chart" id="chartRevenue"></div>
+        </div>
+
+        <div class="grid2" style="margin-top:20px">
+          <div class="acard">
+            <header><h3>Best-performing business lines</h3><span class="hint">By revenue</span></header>
+            <div id="chartRevLines"></div>
+          </div>
+          <div class="acard">
+            <header><h3>Region with the most customers</h3><span class="hint">By bookings</span></header>
+            <div id="chartRevAreas"></div>
+          </div>
+        </div>
+
+        <div class="acard" style="margin-top:20px">
+          <header><h3>Line-by-line breakdown</h3></header>
+          <div id="tableRevLines"></div>
+        </div>
+
+        <div class="acard" style="margin-top:20px">
+          <header><h3>Top customers by spend</h3><span class="hint">Your best 15</span></header>
+          <div id="tableTopCustomers"></div>
+        </div>
+      </section>
+
+      <!-- COSTS -->
+      <section class="asection" id="sec-costs" hidden>
+        <div class="kpirow" id="kpiPnl"></div>
+
+        <div class="acard" style="margin-top:20px">
+          <header><h3>Record an expense</h3><span class="hint">The Manager can record these too — same register</span></header>
+          <div class="formgrid">
+            <div class="field">
+              <label for="exDate">Date</label>
+              <input type="date" id="exDate">
+            </div>
+            <div class="field">
+              <label for="exCat">Category</label>
+              <select id="exCat"></select>
+            </div>
+            <div class="field">
+              <label for="exDesc">Description</label>
+              <input type="text" id="exDesc" placeholder="e.g. October diesel">
+            </div>
+            <div class="field">
+              <label for="exPayee">Paid to <span style="opacity:.6">(optional)</span></label>
+              <input type="text" id="exPayee" placeholder="Supplier or staff name">
+            </div>
+            <div class="field">
+              <label for="exAmt">Amount (₦)</label>
+              <input type="number" id="exAmt" min="0" step="100" placeholder="0" inputmode="numeric">
+            </div>
+            <button class="btn btn-primary" id="addExpense"><span>Add expense</span></button>
+          </div>
+          <p class="err" id="exErr" style="display:none"></p>
+        </div>
+
+        <div class="grid2" style="margin-top:20px">
+          <div class="acard">
+            <header><h3>Where the money goes</h3><span class="hint">Selected period</span></header>
+            <div id="chartCostSplit"></div>
+          </div>
+          <div class="acard">
+            <header><h3>Revenue vs costs</h3><span class="hint">Selected period</span></header>
+            <div id="chartPnl"></div>
+          </div>
+        </div>
+
+        <div class="acard" style="margin-top:20px">
+          <header>
+            <h3>Cost register</h3>
+            <span class="hint" id="expenseCount"></span>
+            <button class="btn btn-ghost btn-sm" id="exportExpenses"><span>Export CSV</span></button>
+          </header>
+          <div id="expensesTable"></div>
+        </div>
+      </section>
+
+      <!-- MANAGERS -->
+      <section class="asection" id="sec-managers" hidden>
+        <div class="acard">
+          <header><h3>Create a manager login</h3><span class="hint">They sign in with the password you set</span></header>
+          <div class="formgrid">
+            <div class="field">
+              <label for="mgName">Name</label>
+              <input type="text" id="mgName" placeholder="e.g. Ada Okonkwo" autocomplete="off">
+            </div>
+            <div class="field">
+              <label for="mgEmail">Email</label>
+              <input type="email" id="mgEmail" placeholder="name@thearena.com" autocomplete="off">
+            </div>
+            <div class="field">
+              <label for="mgPw">Password for the Manager's View</label>
+              <input type="password" id="mgPw" placeholder="At least 8 characters" autocomplete="new-password">
+            </div>
+            <button class="btn btn-primary" id="addManager"><span>Create manager</span></button>
+          </div>
+          <p class="err" id="mgErr" style="display:none"></p>
+          <p class="hint">Managers sign in at <b>/admin → Manager's View</b> using this password.
+          They can see bookings, customers and analytics, and record costs — never revenue,
+          profit or these settings.</p>
+          <p class="hint" id="activationHint" style="display:none">
+            <b>One more step when sync is on:</b> a new account is created <b>disabled</b>.
+            Find it in the list below and press <b>Re-enable</b> before they try to sign in.
+            New accounts start with no access on purpose, so that nobody can give
+            themselves one.</p>
+        </div>
+
+        <div class="acard" style="margin-top:20px">
+          <header><h3>Manager accounts</h3><span class="hint" id="mgCount"></span></header>
+          <div id="managersTable"></div>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="asection" id="sec-settings" hidden>
+        <div class="grid2">
+          <div class="acard">
+            <header><h3>Reset the Director password</h3></header>
+            <div class="field">
+              <label for="curPw">Current password</label>
+              <input type="password" id="curPw" autocomplete="current-password">
+            </div>
+            <div class="field">
+              <label for="setPw">New password</label>
+              <input type="password" id="setPw" autocomplete="new-password" placeholder="At least 8 characters">
+            </div>
+            <div class="field">
+              <label for="setPw2">Confirm new password</label>
+              <input type="password" id="setPw2" autocomplete="new-password">
+            </div>
+            <p class="err" id="pwErr" style="display:none"></p>
+            <button class="btn btn-primary" id="savePw"><span>Update password</span></button>
+          </div>
+
+          <div class="acard">
+            <header><h3>Back up &amp; transfer</h3></header>
+            <p style="font-size:14px">Accounts live in this browser only. Export them to move to
+            another computer, or to keep a backup.</p>
+            <div class="pw-row">
+              <button class="btn btn-ghost btn-sm" id="exportCfg"><span>Export accounts</span></button>
+              <button class="btn btn-ghost btn-sm" id="importCfgBtn"><span>Import accounts</span></button>
+            </div>
+            <input type="file" id="importCfg" accept="application/json" hidden>
+
+            <header style="margin-top:14px"><h3>All booking data</h3></header>
+            <div class="pw-row">
+              <button class="btn btn-ghost btn-sm" id="exportAll"><span>Export every booking</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="acard" style="margin-top:20px">
+          <header><h3>Demonstration data</h3><span class="hint">For showing the console before real bookings exist</span></header>
+          <p style="font-size:14px">Sample bookings and expenses let you see how the dashboards behave.
+          Everything created this way is tagged <b>Sample</b> and can be removed without touching real bookings.</p>
+          <div class="pw-row">
+            <button class="btn btn-ghost btn-sm" id="loadSample"><span>Load sample data</span></button>
+            <button class="btn btn-danger btn-sm" id="clearSample"><span>Remove sample data</span></button>
+          </div>
+        </div>
+
+        <div class="acard" style="margin-top:20px">
+          <header><h3 class="danger">Danger zone</h3></header>
+          <p style="font-size:14px">This deletes every booking and expense stored in this browser.
+          It cannot be undone — export first.</p>
+          <div class="pw-row">
+            <button class="btn btn-danger btn-sm" id="wipeData"><span>Delete all local data</span></button>
+          </div>
+        </div>
+
+        <div class="security-note" style="max-width:none">
+          <span>⚠</span>
+          <span><b>How secure is this, really?</b> This console runs entirely in your browser
+          because the site has no server. The password check keeps casual visitors out, but
+          someone technical can bypass it, and all data sits in this one browser — clearing your
+          site data deletes it. Export regularly, and move to a server-side login before this
+          holds anything you would be upset to lose or leak.</span>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<div class="atoast" id="atoast" role="status" aria-live="polite"></div>
+
+<script src="../assets/js/arena.config.js?v=12"></script>
+<script src="../assets/js/arena.cloud.js?v=12"></script>
+<script src="../assets/js/admin.auth.js?v=12"></script>
+<script src="../assets/js/admin.data.js?v=12"></script>
+<script src="../assets/js/admin.ui.js?v=12"></script>
+<script src="../assets/js/admin.dash.js?v=12"></script>
+<script src="../assets/js/admin.director.js?v=12"></script>
+</body>
+</html>
