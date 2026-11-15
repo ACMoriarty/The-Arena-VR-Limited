@@ -37,6 +37,15 @@
   var PAY_ONLINE = !!(A.paystack && A.paystack.enabled);
   var BONUS = A.booking.bonus || null;
   var SHOW_EVENTS = A.booking.showEvents !== false;
+  var PICK_GAME = A.booking.pickGame === true;
+
+  /* Step 2 (game choice) is skipped for activities unless pickGame is on.
+     Events still use it (team / opening number). */
+  function hasGameStep() { return S.kind === 'event' || PICK_GAME; }
+  function nextStep(n) { var m = n + 1; if (m === 2 && !hasGameStep()) m = 3; return Math.min(LAST, m); }
+  function prevStep(n) { var m = n - 1; if (m === 2 && !hasGameStep()) m = 1; return Math.max(1, m); }
+
+  var STEP_NAMES = { 1: 'Experience', 2: 'Your game', 3: 'Date & time', 4: 'Your details', 5: 'Book' };
 
   /* ---------------------------------------------------------------------
      PRICING
@@ -355,18 +364,7 @@
     $$('.fstep').forEach(function (s) {
       s.classList.toggle('on', +s.getAttribute('data-step') === n);
     });
-    $$('#stepper div').forEach(function (d) {
-      var i = +d.getAttribute('data-s');
-      d.classList.toggle('on', i === n);
-      d.classList.toggle('done', i < n);
-      // on phones the strip scrolls sideways — keep the live step visible
-      if (i === n && d.parentNode.scrollWidth > d.parentNode.clientWidth) {
-        d.parentNode.scrollTo({
-          left: Math.max(0, d.offsetLeft - 16),
-          behavior: U.reduce ? 'auto' : 'smooth'
-        });
-      }
-    });
+    paintStepper(n);
     $('#rail').style.display = n > LAST ? 'none' : '';
     if (n === 2) buildStep2();
     if (n === 3) buildStep3();
@@ -377,6 +375,29 @@
     var navH = ($('#nav') ? $('#nav').offsetHeight : 72) + 22;
     var top = anchor.getBoundingClientRect().top + window.scrollY - navH;
     window.scrollTo({ top: Math.max(0, top), behavior: U.reduce ? 'auto' : 'smooth' });
+  }
+
+  function paintStepper(n) {
+    var shown = 0;
+    $$('#stepper div').forEach(function (d) {
+      var i = +d.getAttribute('data-s');
+      // hide the game step when it is skipped, and number the rest 01, 02…
+      var skip = i === 2 && !hasGameStep();
+      d.hidden = skip;
+      if (!skip) {
+        shown++;
+        d.textContent = '0' + shown + ' · ' + (i === 5 && PAY_ONLINE ? 'Pay' : STEP_NAMES[i]);
+      }
+      d.classList.toggle('on', i === n);
+      d.classList.toggle('done', i < n);
+      // on phones the strip scrolls sideways — keep the live step visible
+      if (i === n && d.parentNode.scrollWidth > d.parentNode.clientWidth) {
+        d.parentNode.scrollTo({
+          left: Math.max(0, d.offsetLeft - 16),
+          behavior: U.reduce ? 'auto' : 'smooth'
+        });
+      }
+    });
   }
 
   /* ---------------------------------------------------------------------
@@ -437,10 +458,10 @@
 
     var label, disabled = false;
     if (S.step === LAST) {
-      label = PAY_ONLINE ? 'Pay ' + money(p.total) : 'Send booking';
+      label = PAY_ONLINE ? 'Pay ' + money(p.total) : 'Book';
       disabled = PAY_ONLINE && p.total <= 0;
     } else {
-      label = S.step === 4 ? (PAY_ONLINE ? 'Review & pay' : 'Review & send') : 'Continue';
+      label = S.step === 4 ? (PAY_ONLINE ? 'Review & pay' : 'Review & book') : 'Continue';
       var stepBtn = $('.fstep[data-step="' + S.step + '"] [data-next]');
       disabled = !!(stepBtn && stepBtn.disabled);
     }
@@ -473,7 +494,7 @@
     }).join('');
     $('#tkTotal').textContent = money(p.total);
 
-    $('#payLabel').textContent = PAY_ONLINE ? 'Pay ' + money(p.total) : 'Send booking';
+    $('#payLabel').textContent = PAY_ONLINE ? 'Pay ' + money(p.total) : 'Book';
     $('#payBtn').disabled = PAY_ONLINE && p.total <= 0;
   }
 
@@ -501,7 +522,7 @@
     if (BONUS && S.bonus) lines.push('Bonus: ' + BONUS.name);
     if (S.area) lines.push('Coming from: ' + S.area);
     if (S.note) lines.push('Notes: ' + S.note);
-    lines.push('Estimated total: ' + money(p.total));
+    lines.push('Total: ' + money(p.total));
     return lines.join('\n');
   }
 
@@ -700,11 +721,11 @@
   $$('[data-next]').forEach(function (b) {
     b.addEventListener('click', function () {
       if (!validateStep(S.step)) return;
-      goto(Math.min(LAST, S.step + 1));
+      goto(nextStep(S.step));
     });
   });
   $$('[data-prev]').forEach(function (b) {
-    b.addEventListener('click', function () { goto(Math.max(1, S.step - 1)); });
+    b.addEventListener('click', function () { goto(prevStep(S.step)); });
   });
 
   $('#bDate').addEventListener('change', function () {
@@ -754,7 +775,7 @@
     pbAction.addEventListener('click', function () {
       if (S.step === LAST) { pay(); return; }
       if (!validateStep(S.step)) return;
-      goto(Math.min(LAST, S.step + 1));
+      goto(nextStep(S.step));
     });
   }
 
@@ -768,7 +789,6 @@
 
   // wording for the last step, payment on vs off
   if (PAY_ONLINE) {
-    $('#stepLast').textContent = '05 · Pay';
     $('#toReviewLabel').textContent = 'Review & pay';
     $('#reviewHead').textContent = 'Check and pay';
     $('#reviewSub').textContent = 'One last look before we take payment.';
@@ -792,14 +812,21 @@
       var eb = $('[data-exp="' + expId + '"]');
       if (eb) {
         eb.click();
-        goto(2);
-        if (game) {
-          var chip = $('#gameOpts [data-game="' + game.replace(/"/g, '&quot;') + '"]');
-          if (chip) { chip.click(); goto(3); }
+        if (!PICK_GAME) {
+          // a game picked on the homepage is kept as a preference, not required
+          if (game && S.exp.games.indexOf(game) !== -1) S.game = game;
+          goto(3);
+        } else {
+          goto(2);
+          if (game) {
+            var chip = $('#gameOpts [data-game="' + game.replace(/"/g, '&quot;') + '"]');
+            if (chip) { chip.click(); goto(3); }
+          }
         }
       }
     }
   }());
 
+  if (S.step === 1) paintStepper(1);
   render();
 }());

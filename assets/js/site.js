@@ -245,7 +245,7 @@
           '<p>' + x.blurb + '</p>' +
           '<div class="zone-foot">' +
             '<div class="zone-price">' + money(x.price) + '<small>' + per + '</small></div>' +
-            '<a class="btn btn-ghost btn-sm" href="book.html?exp=' + x.id + '"><span>Book &amp; choose game</span></a>' +
+            '<a class="btn btn-ghost btn-sm" href="book.html?exp=' + x.id + '"><span>Book</span></a>' +
           '</div>' +
         '</div>' +
       '</article>';

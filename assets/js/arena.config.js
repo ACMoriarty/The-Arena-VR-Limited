@@ -114,6 +114,10 @@ window.ARENA = {
       '2347079901516'    // 0707 990 1516
     ],
 
+    /* Ask the customer to pick a specific game/playlist when booking.
+       false = they just pick the activity; the game is chosen on the day. */
+    pickGame: false,
+
     /* Show the FIFA / Karaoke Challenge events in the booking form.
        false = customers can only book the five main activities. */
     showEvents: false,

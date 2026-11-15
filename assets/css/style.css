@@ -804,6 +804,9 @@ section[id]{scroll-margin-top:96px}
   padding:12px 22px;border:1px dashed var(--line-strong);border-radius:14px;
 }
 
+/* the hidden attribute must win over component display rules */
+[hidden]{display:none !important}
+
 /* WhatsApp send buttons on the confirmation screen */
 .wa-send{display:grid;gap:10px;width:100%;max-width:360px}
 .wa-send .wa-btn{justify-content:center;gap:10px}
