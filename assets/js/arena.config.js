@@ -26,7 +26,7 @@ window.ARENA = {
     tiktok:    'https://tiktok.com/@thearenavr',     // ### TODO ###
     x:         'https://x.com/thearenavr',           // ### TODO ###
     hours: [
-      { days:'Monday',             time:'Closed' },
+      { days:'Monday',             time:'10:00am – 7:00pm' },
       { days:'Tuesday – Saturday', time:'10:00am – 7:00pm' },
       { days:'Sunday',             time:'1:00pm – 7:00pm'  }
     ],
