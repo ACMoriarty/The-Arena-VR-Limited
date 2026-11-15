@@ -449,7 +449,13 @@
         st.textContent = 'Today ' + fmt(win.open) + ' – ' + fmt(win.close) + ' · Boundary Road, GRA';
         if (tag) tag.classList.remove('live');
       } else {
-        st.textContent = 'Closed today · Open Tuesday from 10am';
+        var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        var next = '';
+        for (var d = 1; d <= 7; d++) {
+          var nw = A.booking.schedule[(now.getDay() + d) % 7];
+          if (nw) { next = ' · Open ' + (d === 1 ? 'tomorrow' : DAYS[(now.getDay() + d) % 7]) + ' from ' + fmt(nw.open); break; }
+        }
+        st.textContent = 'We are closed on ' + DAYS[now.getDay()] + 's' + next;
         if (tag) tag.classList.remove('live');
       }
     }

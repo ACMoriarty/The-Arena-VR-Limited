@@ -26,6 +26,7 @@ window.ARENA = {
     tiktok:    'https://tiktok.com/@thearenavr',     // ### TODO ###
     x:         'https://x.com/thearenavr',           // ### TODO ###
     hours: [
+      /* Display only — keep in step with booking.schedule below. */
       { days:'Monday – Friday',    time:'10:00am – 7:00pm' },
       { days:'Saturday',           time:'10:00am – 9:00pm' },
       { days:'Sunday',             time:'12:00pm – 9:00pm' }
@@ -87,13 +88,13 @@ window.ARENA = {
        null means closed that day — no slots are offered at all.
        A session is only offered if it can finish before `close`. */
     schedule: {
-      0: { open: 13, close: 19 },   // Sunday    1pm – 7pm
-      1: null,                      // Monday    closed
-      2: { open: 10, close: 19 },   // Tuesday   10am – 7pm
+      0: { open: 12, close: 21 },   // Sunday    12pm – 9pm
+      1: { open: 10, close: 19 },   // Monday    10am – 7pm
+      2: { open: 10, close: 19 },   // Tuesday
       3: { open: 10, close: 19 },   // Wednesday
       4: { open: 10, close: 19 },   // Thursday
       5: { open: 10, close: 19 },   // Friday
-      6: { open: 10, close: 19 }    // Saturday
+      6: { open: 10, close: 21 }    // Saturday  10am – 9pm
     },
     slotMinutes: 30,  // granularity of the time picker
     maxDaysAhead: 30, // how far in advance people may book

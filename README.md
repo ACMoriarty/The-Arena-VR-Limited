@@ -94,10 +94,10 @@ themselves from that one list.
 * `booking.schedule` controls which slots the booking form actually offers,
   per weekday (`0` = Sunday … `6` = Saturday). `null` means closed that day.
 
-Currently set to **Tuesday–Saturday 10am–7pm, Sunday 1pm–7pm, closed Monday**.
-The engine never offers a slot that would run past closing, and picking a
-Monday shows "We are closed on Mondays" instead of times. Keep the two in step
-if you change one.
+Currently set to **Monday–Friday 10am–7pm, Saturday 10am–9pm, Sunday 12pm–9pm**
+(open every day). The engine never offers a slot that would run past closing,
+and any day set to `null` shows "We are closed on <day>s" instead of times.
+Keep the two in step if you change one.
 
 **Move an event** — `events.fifa.weekday` (0 = Sunday … 5 = Friday) and `hour`
 drive the live countdown. `events.karaoke.nth: 'last'` means "last Saturday of
