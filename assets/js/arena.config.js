@@ -26,9 +26,9 @@ window.ARENA = {
     tiktok:    'https://tiktok.com/@thearenavr',     // ### TODO ###
     x:         'https://x.com/thearenavr',           // ### TODO ###
     hours: [
-      { days:'Monday',             time:'10:00am – 7:00pm' },
-      { days:'Tuesday – Saturday', time:'10:00am – 7:00pm' },
-      { days:'Sunday',             time:'1:00pm – 7:00pm'  }
+      { days:'Monday – Friday',    time:'10:00am – 7:00pm' },
+      { days:'Saturday',           time:'10:00am – 9:00pm' },
+      { days:'Sunday',             time:'12:00pm – 9:00pm' }
     ],
 
     /* Areas of Benin City, used by the booking form and by the Director's
