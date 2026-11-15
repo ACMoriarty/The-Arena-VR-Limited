@@ -186,8 +186,8 @@
           return '<b>' + esc(money(b.amount)) + '</b>';
         } },
       { label: 'Status', raw: true, render: function (b) {
-          var cls = b.sample ? 'sample' : (b.status === 'demo' ? 'demo' : 'paid');
-          var txt = b.sample ? 'Sample' : (b.status === 'demo' ? 'Demo' : 'Paid');
+          var cls = b.sample ? 'sample' : (b.status === 'demo' ? 'demo' : b.status === 'pending' ? 'pending' : 'paid');
+          var txt = b.sample ? 'Sample' : (b.status === 'demo' ? 'Demo' : b.status === 'pending' ? 'Request' : 'Paid');
           return '<span class="pill ' + cls + '">' + txt + '</span>' +
                  (b.kind === 'event' ? ' <span class="pill event">Event</span>' : '');
         } }

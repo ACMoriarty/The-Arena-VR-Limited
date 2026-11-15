@@ -1,6 +1,7 @@
 /* ==========================================================================
    THE ARENA — booking engine
-   5-step wizard → Paystack Inline checkout.
+   5-step wizard → WhatsApp booking request (or Paystack Inline checkout when
+   paystack.enabled is true in the config).
    All prices, games, hours and the Paystack key come from arena.config.js.
    ========================================================================== */
 (function () {
@@ -26,10 +27,16 @@
     duration: 0,       // minutes
     players: 1,
     name: '', phone: '', email: '', area: '', note: '',
+    bonus: false,      // free board games add-on
     step: 1
   };
 
   var LAST = 5;        // last input step; 6 is the confirmation screen
+
+  /* Online payment on/off. Off = the booking is sent to the team on WhatsApp. */
+  var PAY_ONLINE = !!(A.paystack && A.paystack.enabled);
+  var BONUS = A.booking.bonus || null;
+  var SHOW_EVENTS = A.booking.showEvents !== false;
 
   /* ---------------------------------------------------------------------
      PRICING
@@ -87,7 +94,8 @@
     }).join('');
 
     var evs = $('#eventOpts');
-    var list = [A.events.fifa, A.events.karaoke];
+    var list = SHOW_EVENTS ? [A.events.fifa, A.events.karaoke] : [];
+    if (!SHOW_EVENTS && $('#eventSplit')) $('#eventSplit').style.display = 'none';
     evs.innerHTML = list.map(function (e, i) {
       var next = U.nextEventDate ? U.nextEventDate(e) : null;
       var when = next ? next.toLocaleDateString('en-NG', { weekday: 'short', day: 'numeric', month: 'short' }) : e.cadence;
@@ -392,6 +400,7 @@
       rows.push(['Length', S.duration < 60 ? S.duration + ' mins' : (S.duration / 60) + ' hr' + (S.duration > 60 ? 's' : '')]);
     }
     rows.push([S.kind === 'event' ? 'Entries' : 'Players', String(S.players)]);
+    if (BONUS && S.bonus) rows.push(['Bonus', BONUS.name + ' (free)']);
     if (S.name) rows.push(['Name', S.name]);
     if (S.phone) rows.push(['Phone', S.phone]);
     return rows;
@@ -428,10 +437,10 @@
 
     var label, disabled = false;
     if (S.step === LAST) {
-      label = 'Pay ' + money(p.total);
-      disabled = p.total <= 0;
+      label = PAY_ONLINE ? 'Pay ' + money(p.total) : 'Send booking';
+      disabled = PAY_ONLINE && p.total <= 0;
     } else {
-      label = S.step === 4 ? 'Review & pay' : 'Continue';
+      label = S.step === 4 ? (PAY_ONLINE ? 'Review & pay' : 'Review & send') : 'Continue';
       var stepBtn = $('.fstep[data-step="' + S.step + '"] [data-next]');
       disabled = !!(stepBtn && stepBtn.disabled);
     }
@@ -464,8 +473,86 @@
     }).join('');
     $('#tkTotal').textContent = money(p.total);
 
-    $('#payLabel').textContent = 'Pay ' + money(p.total);
-    $('#payBtn').disabled = p.total <= 0;
+    $('#payLabel').textContent = PAY_ONLINE ? 'Pay ' + money(p.total) : 'Send booking';
+    $('#payBtn').disabled = PAY_ONLINE && p.total <= 0;
+  }
+
+  /* ---------------------------------------------------------------------
+     WHATSAPP BOOKING — used while online payment is switched off
+     ---------------------------------------------------------------------
+     A wa.me link can only open one chat, so the confirmation screen gives
+     one button per number. The first chat is opened straight away.
+     --------------------------------------------------------------------- */
+  function bookingMessage(ref, heading) {
+    var p = priceBreakdown();
+    var what = S.kind === 'event' ? S.event.name : S.exp.name;
+    var when = prettyDate(S.date) + ' at ' + (S.kind === 'event' ? S.event.time : prettyTime(S.time));
+    var lines = [
+      heading,
+      'Ref: ' + ref,
+      'Name: ' + S.name,
+      'Phone: ' + S.phone,
+      'Email: ' + S.email,
+      'Activity: ' + what + (S.game ? ' — ' + S.game : ''),
+      'When: ' + when
+    ];
+    if (S.kind !== 'event') lines.push('Length: ' + S.duration + ' mins');
+    lines.push((S.kind === 'event' ? 'Entries: ' : 'Players: ') + S.players);
+    if (BONUS && S.bonus) lines.push('Bonus: ' + BONUS.name);
+    if (S.area) lines.push('Coming from: ' + S.area);
+    if (S.note) lines.push('Notes: ' + S.note);
+    lines.push('Estimated total: ' + money(p.total));
+    return lines.join('\n');
+  }
+
+  function waLink(num, text) {
+    return 'https://wa.me/' + num + '?text=' + encodeURIComponent(text);
+  }
+
+  function localNumber(intl) {
+    var d = String(intl).replace(/\D/g, '');
+    if (d.indexOf('234') === 0) d = '0' + d.slice(3);
+    return d.replace(/^(\d{4})(\d{3})(\d+)$/, '$1 $2 $3');
+  }
+
+  function sendRequest() {
+    if (!validateStep(4)) { goto(4); return; }
+
+    var ref = reference();
+    var msg = bookingMessage(ref, 'Hi The Arena! New booking request.');
+    var nums = (A.booking.whatsappTo && A.booking.whatsappTo.length)
+      ? A.booking.whatsappTo : [A.business.whatsapp];
+
+    var what = S.kind === 'event' ? S.event.name : S.exp.name;
+    var when = prettyDate(S.date) + ' at ' + (S.kind === 'event' ? S.event.time : prettyTime(S.time));
+
+    $('#doneHead').textContent = 'Booking received.';
+    $('#refCode').textContent = ref;
+    $('#doneMsg').textContent = 'Thanks, ' + S.name.split(' ')[0] + ' — we have your booking for ' +
+      what + (S.game ? ' · ' + S.game : '') + ' on ' + when + '.';
+    $('#doneNote').textContent = 'Please send it to our team on WhatsApp below so we can confirm your slot. ' +
+      'Keep your reference handy for the desk at 85 Boundary Road.';
+
+    var wrap = $('#waSend');
+    wrap.innerHTML = nums.map(function (n, i) {
+      return '<a class="btn ' + (i ? 'btn-ghost' : 'btn-primary') + ' wa-btn" href="' + waLink(n, msg) +
+             '" target="_blank" rel="noopener" data-wa="' + i + '">' +
+             '<span>Send to ' + localNumber(n) + '</span><i class="wa-tick" aria-hidden="true">✓</i></a>';
+    }).join('');
+    wrap.onclick = function (e) {
+      var a = e.target.closest('[data-wa]');
+      if (a) a.classList.add('sent');
+    };
+
+    saveBooking(ref, 'pending');
+    goto(6);
+
+    // still inside the click, so the browser allows this one window
+    var first = $('[data-wa="0"]', wrap);
+    if (first) {
+      var w = window.open(first.href, '_blank');
+      if (w) { try { w.opener = null; } catch (e) { /* ignore */ } first.classList.add('sent'); }
+    }
   }
 
   /* ---------------------------------------------------------------------
@@ -485,6 +572,7 @@
   }
 
   function pay() {
+    if (!PAY_ONLINE) { sendRequest(); return; }
     if (!validateStep(4)) { goto(4); return; }
     var p = priceBreakdown();
     if (p.total <= 0) return;
@@ -547,19 +635,23 @@
     var what = S.kind === 'event' ? S.event.name : S.exp.name;
     var when = prettyDate(S.date) + ' at ' + (S.kind === 'event' ? S.event.time : prettyTime(S.time));
 
+    $('#doneHead').textContent = 'You\'re in.';
     $('#refCode').textContent = ref;
     $('#doneMsg').textContent = (demo ? '[Demo booking — no payment was taken] ' : '') +
       what + (S.game ? ' · ' + S.game : '') + ' — ' + when + '. See you at 85 Boundary Road.';
+    $('#doneNote').textContent = 'Show this reference at the desk. Running late or need to change ' +
+      'something? Message us on WhatsApp and we\'ll sort it.';
 
-    var msg = 'Hi The Arena! Booking confirmed.\n' +
-      'Ref: ' + ref + '\n' +
-      'Name: ' + S.name + '\n' +
-      what + (S.game ? ' — ' + S.game : '') + '\n' +
-      when + '\n' +
-      (S.kind !== 'event' ? 'Length: ' + S.duration + ' mins\n' : '') +
-      'Players: ' + S.players;
-    $('#doneWa').href = 'https://wa.me/' + A.business.whatsapp + '?text=' + encodeURIComponent(msg);
+    var doneWa = $('#doneWa');
+    doneWa.href = waLink(A.business.whatsapp, bookingMessage(ref, 'Hi The Arena! Booking confirmed.'));
+    doneWa.hidden = false;
 
+    saveBooking(ref, demo ? 'demo' : 'paid');
+    goto(6);
+  }
+
+  function saveBooking(ref, status) {
+    var what = S.kind === 'event' ? S.event.name : S.exp.name;
     /* Record the booking.
        If cross-device sync is configured (arena.config.js -> cloud), it goes to
        the shared database so it appears on every admin dashboard, whatever
@@ -578,11 +670,11 @@
         duration: S.kind === 'event' ? 0 : S.duration,
         players: S.players,
         amount: p2.total,
-        status: demo ? 'demo' : 'paid',
+        status: status,
         customer: {
           name: S.name, phone: S.phone, email: S.email, area: S.area || ''
         },
-        note: S.note || ''
+        note: [BONUS && S.bonus ? '[+ ' + BONUS.name + ']' : '', S.note || ''].join(' ').trim()
     };
 
     try {
@@ -593,13 +685,11 @@
 
     if (window.ArenaCloud && window.ArenaCloud.configured()) {
       window.ArenaCloud.createBooking(record).catch(function (err) {
-        // The customer has already paid — never block them on a sync problem.
+        // Never block the customer on a sync problem.
         // The local copy above keeps the booking, and the reference still works.
         if (window.console) console.warn('Booking sync failed:', err && err.message);
       });
     }
-
-    goto(6);
   }
 
   /* ---------------------------------------------------------------------
@@ -668,9 +758,25 @@
     });
   }
 
-  // demo-mode notice
-  var keyOk = /^pk_(test|live)_[A-Za-z0-9]{10,}$/.test(A.paystack.publicKey || '');
-  if (A.paystack.demoMode || !keyOk) $('#demoNote').style.display = 'flex';
+  // free bonus add-on
+  if (BONUS) {
+    $('#fBonus').hidden = false;
+    $('#bonusName').textContent = BONUS.name;
+    $('#bonusHint').textContent = BONUS.hint || '';
+    $('#bBonus').addEventListener('change', function () { S.bonus = this.checked; render(); });
+  }
+
+  // wording for the last step, payment on vs off
+  if (PAY_ONLINE) {
+    $('#stepLast').textContent = '05 · Pay';
+    $('#toReviewLabel').textContent = 'Review & pay';
+    $('#reviewHead').textContent = 'Check and pay';
+    $('#reviewSub').textContent = 'One last look before we take payment.';
+    $('#tkTotalLabel').textContent = 'Total to pay';
+    $('#payMarks').hidden = false;
+    var keyOk = /^pk_(test|live)_[A-Za-z0-9]{10,}$/.test(A.paystack.publicKey || '');
+    if (A.paystack.demoMode || !keyOk) $('#demoNote').style.display = 'flex';
+  }
 
   /* ---------------------------------------------------------------------
      DEEP LINKS  —  book.html?exp=ps5&game=EA%20FC%2026 | ?event=fifa
@@ -679,7 +785,7 @@
     var q = new URLSearchParams(location.search);
     var expId = q.get('exp'), evId = q.get('event'), game = q.get('game');
 
-    if (evId) {
+    if (evId && SHOW_EVENTS) {
       var btn = $('[data-event="' + evId + '"]');
       if (btn) { btn.click(); goto(2); }
     } else if (expId) {

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Book to Play — The Arena VR, Benin City</title>
-<meta name="description" content="Book a session at The Arena VR, Benin City. Choose 360° VR, motorcycle simulator, PS5, Meta Quest or karaoke, pick your exact game, and pay online with Paystack.">
+<meta name="description" content="Book a session at The Arena VR, Benin City. Choose 360° VR, car racing, PS5, Meta Quest or karaoke, pick your exact game, and send your booking to us on WhatsApp.">
 <meta name="theme-color" content="#0D0D0F">
 <meta name="robots" content="index,follow">
 <link rel="icon" href="assets/logo/favicon.png" type="image/png" sizes="512x512">
@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
 <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=11">
+<link rel="stylesheet" href="assets/css/style.css?v=12">
 </head>
 <body>
 
@@ -61,17 +61,17 @@
   <div class="shell book-top-in">
     <span class="tag live"><i class="dot"></i> Booking open · 85 Boundary Road, GRA</span>
     <h1 class="h-lg">Reserve your <span class="grad-fire">station</span></h1>
-    <p class="lead">Pick what you're playing, choose the exact game, tell us when — then pay online
-    and walk straight in. Takes about a minute.</p>
+    <p class="lead">Pick what you're playing, choose the exact game, tell us when — then send it to us
+    on WhatsApp and we'll hold your slot. Takes about a minute.</p>
 
     <ul class="assure">
       <li>
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10.5" width="16" height="10" rx="2.5"/><path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7"/></svg>
-        <b>Pay securely</b><span>Card, transfer or USSD</span>
+        <b>Nothing to pay online</b><span>Just send us your booking</span>
       </li>
       <li>
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
-        <b>Instant confirmation</b><span>Reference on the spot</span>
+        <b>Booking reference</b><span>Given on the spot</span>
       </li>
       <li>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9.6 9.6 0 0 1-2.6-.4L4 21l1.6-4.7A8.3 8.3 0 0 1 12 3.1a8.4 8.4 0 0 1 9 8.4z"/></svg>
@@ -92,7 +92,7 @@
         <div data-s="2">02 · Your game</div>
         <div data-s="3">03 · Date &amp; time</div>
         <div data-s="4">04 · Your details</div>
-        <div data-s="5">05 · Pay</div>
+        <div data-s="5" id="stepLast">05 · Send</div>
       </div>
 
       <div class="panel">
@@ -103,7 +103,7 @@
           <p class="lead">Five stations on the floor. Prices are per block — you choose the length next.</p>
           <div class="opts" id="expOpts"></div>
 
-          <div class="opts-split">
+          <div class="opts-split" id="eventSplit">
             <p class="mono">Or enter an event</p>
             <div class="opts two" id="eventOpts"></div>
           </div>
@@ -158,6 +158,14 @@
             <span class="hint" id="playersHint">Everyone in your group needs a station.</span>
           </div>
 
+          <div class="field" style="margin-top:24px" id="fBonus" hidden>
+            <label class="bonus-check" for="bBonus">
+              <input type="checkbox" id="bBonus">
+              <span><b id="bonusName">Board games</b> <span class="bonus-free">Free bonus</span>
+              <span class="hint" id="bonusHint"></span></span>
+            </label>
+          </div>
+
           <div class="fnav">
             <button class="btn btn-ghost" data-prev><span>Back</span></button>
             <button class="btn btn-primary" data-next><span>Continue</span></button>
@@ -185,7 +193,7 @@
           <div class="field" style="margin-top:18px" id="fEmail">
             <label for="bEmail">Email</label>
             <input type="email" id="bEmail" placeholder="you@email.com" autocomplete="email" inputmode="email" enterkeyhint="done">
-            <span class="hint">Your receipt and booking reference go here.</span>
+            <span class="hint">So we can reach you about your booking.</span>
             <span class="err">Enter a valid email address.</span>
           </div>
 
@@ -202,14 +210,15 @@
 
           <div class="fnav">
             <button class="btn btn-ghost" data-prev><span>Back</span></button>
-            <button class="btn btn-primary" data-next><span>Review &amp; pay</span></button>
+            <button class="btn btn-primary" data-next><span id="toReviewLabel">Review &amp; send</span></button>
           </div>
         </section>
 
         <!-- ---------- STEP 5 ---------- -->
         <section class="fstep" data-step="5">
-          <h2>Check and pay</h2>
-          <p class="lead">One last look before we take payment.</p>
+          <h2 id="reviewHead">Check and send</h2>
+          <p class="lead" id="reviewSub">One last look, then send your booking to our team on WhatsApp.
+          Nothing is charged online.</p>
 
           <div class="ticket">
             <div class="ticket-top">
@@ -221,7 +230,7 @@
             </div>
             <dl class="ticket-rows" id="reviewRows"></dl>
             <div class="tk-foot">
-              <span>Total to pay</span>
+              <span id="tkTotalLabel">Estimated total</span>
               <b id="tkTotal">₦0</b>
             </div>
           </div>
@@ -230,14 +239,13 @@
             <span>⚠</span>
             <span><b>Demo mode.</b> No Paystack key is set yet, so the payment step is simulated —
             you'll get a booking reference but no money moves. Add your public key in
-            <code>assets/js/arena.config.js?v=11</code> and set <code>demoMode: false</code> to go live.</span>
+            <code>assets/js/arena.config.js?v=12</code> and set <code>demoMode: false</code> to go live.</span>
           </div>
 
           <div class="fnav">
             <button class="btn btn-ghost" data-prev><span>Back</span></button>
             <button class="btn btn-primary btn-lg" id="payBtn">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="M2.5 10h19"/></svg>
-              <span id="payLabel">Pay now</span>
+              <span id="payLabel">Send booking</span>
             </button>
           </div>
         </section>
@@ -248,14 +256,13 @@
             <div class="done-hex">
               <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
-            <h2 style="font-size:clamp(28px,4vw,42px)">You're in.</h2>
+            <h2 style="font-size:clamp(28px,4vw,42px)" id="doneHead">Booking received.</h2>
             <p class="lead" id="doneMsg" style="text-align:center"></p>
             <div class="ref-code" id="refCode">—</div>
-            <p class="lead" style="text-align:center;font-size:14px">Show this reference at the desk.
-            We've also sent it to your email. Running late or need to change something? Message us on
-            WhatsApp and we'll sort it.</p>
+            <p class="lead" style="text-align:center;font-size:14px" id="doneNote"></p>
+            <div class="wa-send" id="waSend"></div>
             <div class="hero-ctas" style="justify-content:center">
-              <a class="btn btn-primary" id="doneWa" href="#" target="_blank" rel="noopener"><span>Send booking to WhatsApp</span></a>
+              <a class="btn btn-primary" id="doneWa" href="#" target="_blank" rel="noopener" hidden><span>Send booking to WhatsApp</span></a>
               <a class="btn btn-ghost" href="index.html"><span>Back to the site</span></a>
             </div>
           </div>
@@ -280,7 +287,7 @@
         <b id="railTotal">₦0</b>
       </div>
       <p class="note" id="railNote">Pick an experience to see your price.</p>
-      <div class="pay-marks">
+      <div class="pay-marks" id="payMarks" hidden>
         <svg viewBox="0 0 24 24"><rect x="4" y="10.5" width="16" height="10" rx="2.5"/><path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7"/></svg>
         <span>Secured by Paystack</span>
       </div>
@@ -312,10 +319,12 @@
   <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.2-1.8-.9-2-1s-.5-.2-.7.1-.8 1-1 1.2-.4.2-.7 0a8.2 8.2 0 0 1-2.4-1.5 9 9 0 0 1-1.7-2.1c-.2-.3 0-.5.1-.6l.5-.6a2 2 0 0 0 .3-.5.6.6 0 0 0 0-.6L9 6.6c-.2-.5-.4-.5-.6-.5h-.6a1.1 1.1 0 0 0-.8.4A3.3 3.3 0 0 0 6 8.9a5.8 5.8 0 0 0 1.2 3 13.1 13.1 0 0 0 5 4.4 9.9 9.9 0 0 0 3.4.9 2.9 2.9 0 0 0 2-.7 2.4 2.4 0 0 0 .6-1.7c0-.2-.1-.3-.4-.4zM12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2z"/></svg>
 </a>
 
-<script src="https://js.paystack.co/v1/inline.js"></script>
-<script src="assets/js/arena.config.js?v=11"></script>
-<script src="assets/js/arena.cloud.js?v=11"></script>
-<script src="assets/js/site.js?v=11"></script>
-<script src="assets/js/booking.js?v=11"></script>
+<!-- Online payment is switched off (arena.config.js -> paystack.enabled).
+     Put this line back when turning it on again:
+<script src="https://js.paystack.co/v1/inline.js"></script> -->
+<script src="assets/js/arena.config.js?v=12"></script>
+<script src="assets/js/arena.cloud.js?v=12"></script>
+<script src="assets/js/site.js?v=12"></script>
+<script src="assets/js/booking.js?v=12"></script>
 </body>
 </html>

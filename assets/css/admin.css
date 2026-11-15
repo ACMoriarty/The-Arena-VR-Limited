@@ -222,6 +222,7 @@ body.admin{background:var(--bg);color:var(--ink-2)}
   font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
 }
 .pill.paid{background:rgba(59,224,122,.15);color:#63E89A}
+.pill.pending{background:rgba(252,79,21,.15);color:#FF8A5C}
 .pill.demo{background:rgba(255,222,21,.14);color:var(--yellow)}
 .pill.sample{background:rgba(124,124,255,.16);color:#9E9EFF}
 .pill.event{background:rgba(252,79,21,.14);color:var(--orange)}

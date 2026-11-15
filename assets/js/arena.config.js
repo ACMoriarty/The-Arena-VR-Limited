@@ -49,6 +49,10 @@ window.ARENA = {
      The PUBLIC key is safe to sit in this file. NEVER put a secret key here.
      --------------------------------------------------------------------- */
   paystack: {
+    /* OFF for now: bookings are sent to the team on WhatsApp instead of being
+       paid online (see booking.whatsappTo). Set to true to bring the Paystack
+       checkout back, and restore the Paystack <script> line in book.html. */
+    enabled:   false,
     publicKey: 'pk_test_REPLACE_WITH_YOUR_PAYSTACK_PUBLIC_KEY',  // ### TODO ###
     currency:  'NGN',
     /* Set to false once a real key is in place. While true, the "Pay" button
@@ -100,7 +104,25 @@ window.ARENA = {
     maxDaysAhead: 30, // how far in advance people may book
     maxPlayers:  12,
     /* Optional flat booking/service fee added to every order. 0 = none. */
-    serviceFee: 0
+    serviceFee: 0,
+
+    /* While online payment is off, a finished booking is sent as a WhatsApp
+       message to each of these numbers (international format, no + or spaces). */
+    whatsappTo: [
+      '2348067289880',   // 0806 728 9880
+      '2348109156723',   // 0810 915 6723
+      '2347079901516'    // 0707 990 1516
+    ],
+
+    /* Show the FIFA / Karaoke Challenge events in the booking form.
+       false = customers can only book the five main activities. */
+    showEvents: false,
+
+    /* Free extra a customer can tick on any booking. Set to null to remove. */
+    bonus: {
+      name: 'Board games',
+      hint: 'Free with any booking — we’ll set a table aside for your group.'
+    }
   },
 
   /* ---------------------------------------------------------------------
@@ -140,26 +162,28 @@ window.ARENA = {
       ]
     },
     {
-      id:'moto',
-      name:'Motorcycle Simulator',
-      tag:'Motion rig',
-      icon:'moto',
+      id:'racing',
+      name:'Car Racing',
+      tag:'Racing rig',
+      icon:'car',
       accent:'cyan',
-      blurb:'A full-size motion bike that leans, kicks and fights back. Pick your track, drop the visor and hold on.',
-      image:'assets/img/moto.webp',
+      blurb:'Bucket seat, wheel, pedals and a grid of rivals. Pick your car and your circuit, then chase the lap record.',
+      /* ### TODO ### drop a photo at assets/img/racing.webp and put the path here.
+         Empty for now, so the card shows the branded gradient. */
+      image:'',
       price:2500,          // ### PLACEHOLDER ###
       unit:15,
       unitLabel:'15 mins',
       durations:[15,30,45,60],
-      games:[
-        'MotoGP 24',
-        'Ride 5',
-        'TT Isle of Man: Ride on the Edge 3',
-        'RiMS Racing',
-        'Road Rash Rewind',
-        'Highway Rider Extreme',
-        'Supercross 24',
-        'City Sprint Challenge'
+      games:[              // ### PLACEHOLDER ### — swap for the titles you actually run
+        'Gran Turismo 7',
+        'F1 25',
+        'Assetto Corsa Competizione',
+        'Forza Motorsport',
+        'Need for Speed Unbound',
+        'EA Sports WRC',
+        'Project CARS 2',
+        'Dirt Rally 2.0'
       ]
     },
     {

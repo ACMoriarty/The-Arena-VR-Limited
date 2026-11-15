@@ -132,7 +132,7 @@ Useful for adverts, Instagram bios and WhatsApp broadcasts:
 | `book.html?event=fifa` | FIFA tournament entry |
 | `book.html?event=karaoke` | Karaoke Challenge entry |
 
-Experience ids: `vr360`, `moto`, `ps5`, `quest`, `karaoke`.
+Experience ids: `vr360`, `racing`, `ps5`, `quest`, `karaoke`.
 
 ---
 

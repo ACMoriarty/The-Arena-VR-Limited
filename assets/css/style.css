@@ -804,6 +804,26 @@ section[id]{scroll-margin-top:96px}
   padding:12px 22px;border:1px dashed var(--line-strong);border-radius:14px;
 }
 
+/* WhatsApp send buttons on the confirmation screen */
+.wa-send{display:grid;gap:10px;width:100%;max-width:360px}
+.wa-send .wa-btn{justify-content:center;gap:10px}
+.wa-tick{font-style:normal;font-weight:800;opacity:0;transition:opacity .2s}
+.wa-btn.sent .wa-tick{opacity:1}
+
+/* free bonus add-on (board games) */
+.field label.bonus-check{
+  display:flex;gap:14px;align-items:flex-start;cursor:pointer;
+  padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--surface);
+  text-transform:none;letter-spacing:0;font-size:15px;color:var(--ink);
+}
+.bonus-check:has(input:checked){border-color:var(--cyan);background:rgba(32,233,249,.06)}
+.bonus-check input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:var(--cyan)}
+.bonus-check .hint{display:block;margin-top:4px}
+.bonus-free{
+  display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;
+  font-size:11px;font-weight:700;background:rgba(32,233,249,.14);color:var(--cyan);
+}
+
 /* config banner */
 .cfg-note{
   border:1px dashed rgba(255,222,21,.5);background:rgba(255,222,21,.07);
