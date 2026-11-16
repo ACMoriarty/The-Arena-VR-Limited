@@ -17,6 +17,32 @@
   };
   window.ArenaUtil = { money: money, $: $, $$: $$, reduce: reduce };
 
+  /* price per block for an experience, honouring group-size tiers */
+  window.ArenaUtil.unitPrice = function (x, people) {
+    if (!x.tiers || !x.tiers.length) return x.price;
+    for (var i = 0; i < x.tiers.length; i++) {
+      if (people <= x.tiers[i].upTo) return x.tiers[i].price;
+    }
+    return x.tiers[x.tiers.length - 1].price;
+  };
+
+  /* short "who it covers" label, e.g. "per player / 15 mins" or "1–5 people / hour" */
+  window.ArenaUtil.priceUnit = function (x) {
+    if (x.tiers && x.tiers.length) return '1–' + x.tiers[0].upTo + ' people / ' + x.unitLabel;
+    return (x.perRoom ? 'per room / ' : 'per player / ') + x.unitLabel;
+  };
+
+  /* the tier ladder in words, e.g. "₦10,000 for 1–5 people, ₦15,000 for 6–10" */
+  window.ArenaUtil.tierText = function (x) {
+    if (!x.tiers) return '';
+    var lo = 1;
+    return x.tiers.map(function (t) {
+      var s = money(t.price) + ' for ' + lo + '–' + t.upTo + ' people';
+      lo = t.upTo + 1;
+      return s;
+    }).join(', ') + ' (per ' + x.unitLabel.replace(/^1 /, '') + ')';
+  };
+
   /* ======================================================================
      PRELOADER
      ====================================================================== */
@@ -227,7 +253,7 @@
     if (!wrap || !A) return;
 
     wrap.innerHTML = A.experiences.map(function (x, i) {
-      var per = x.perRoom ? 'per room / ' + x.unitLabel : 'per player / ' + x.unitLabel;
+      var per = window.ArenaUtil.priceUnit(x);
       return '' +
       '<article class="zone" data-reveal data-delay="' + (i * 90) + '">' +
         '<div class="zone-fallback"></div>' +
@@ -240,9 +266,10 @@
           '<div class="zone-meta">' +
             '<span class="tag"><i class="dot"></i>' + x.tag + '</span>' +
             '<span class="tag">' + x.games.length + ' titles</span>' +
+            (x.includes ? '<span class="tag">' + x.includes + '</span>' : '') +
           '</div>' +
           '<h3>' + x.name + '</h3>' +
-          '<p>' + x.blurb + '</p>' +
+          '<p>' + x.blurb + (x.tiers ? ' ' + window.ArenaUtil.tierText(x) + '.' : '') + '</p>' +
           '<div class="zone-foot">' +
             '<div class="zone-price">' + money(x.price) + '<small>' + per + '</small></div>' +
             '<a class="btn btn-ghost btn-sm" href="book.html?exp=' + x.id + '"><span>Book</span></a>' +

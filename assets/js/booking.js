@@ -28,6 +28,8 @@
     players: 1,
     name: '', phone: '', email: '', area: '', note: '',
     bonus: false,      // free board games add-on
+    snacks: false,     // karaoke snack pre-order
+    snackNote: '',
     step: 1
   };
 
@@ -44,6 +46,22 @@
   function hasGameStep() { return S.kind === 'event' || PICK_GAME; }
   function nextStep(n) { var m = n + 1; if (m === 2 && !hasGameStep()) m = 3; return Math.min(LAST, m); }
   function prevStep(n) { var m = n - 1; if (m === 2 && !hasGameStep()) m = 1; return Math.max(1, m); }
+
+  /* price per block, honouring group-size tiers (karaoke) */
+  var unitPrice = U.unitPrice || function (x) { return x.price; };
+  var priceUnit = U.priceUnit || function (x) { return (x.perRoom ? 'per room / ' : 'per player / ') + x.unitLabel; };
+  function maxPlayers() { return (S.exp && S.exp.maxPlayers) || A.booking.maxPlayers || 12; }
+
+  /* Snacks can only be pre-ordered when the session starts far enough ahead. */
+  function snackCfg() { return S.kind === 'experience' && S.exp && S.exp.snacks ? S.exp.snacks : null; }
+  function snacksAllowed() {
+    var c = snackCfg();
+    if (!c || !S.date || !S.time) return false;
+    var d = S.date.split('-'), t = S.time.split(':');
+    var start = new Date(+d[0], +d[1] - 1, +d[2], +t[0], +t[1]);
+    return start.getTime() - Date.now() >= (c.leadMinutes || 60) * 60000;
+  }
+  function wantsSnacks() { return S.snacks && snacksAllowed(); }
 
   var STEP_NAMES = { 1: 'Experience', 2: 'Your game', 3: 'Date & time', 4: 'Your details', 5: 'Book' };
 
@@ -66,10 +84,13 @@
     } else if (S.exp && S.duration) {
       var blocks = Math.max(1, Math.round(S.duration / S.exp.unit));
       var heads = S.exp.perRoom ? 1 : S.players;
-      var sub2 = S.exp.price * blocks * heads;
+      var each = unitPrice(S.exp, S.players);
+      var sub2 = each * blocks * heads;
+      var who = S.exp.tiers ? '1 room (' + S.players + (S.players === 1 ? ' person)' : ' people)')
+              : S.exp.perRoom ? '1 room' : heads + (heads === 1 ? ' player' : ' players');
       out.lines.push({
         label: S.exp.name,
-        detail: money(S.exp.price) + ' × ' + blocks + ' × ' + (S.exp.perRoom ? '1 room' : heads + (heads === 1 ? ' player' : ' players')),
+        detail: money(each) + ' × ' + blocks + ' × ' + who,
         amount: sub2
       });
       out.total = sub2;
@@ -90,15 +111,16 @@
     var wrap = $('#expOpts');
     wrap.innerHTML = A.experiences.map(function (x) {
       var cls = { cyan: 'cy', yellow: 'ye', blue: 'bl' }[x.accent] || '';
-      var per = x.perRoom ? 'per room / ' + x.unitLabel : 'per player / ' + x.unitLabel;
+      var per = priceUnit(x);
       // a photo when we have one, otherwise the brand gradient behind the icon
       var thumb = x.image
         ? '<span class="opt-thumb"><img src="' + x.image + '" alt="" loading="lazy" decoding="async"></span>'
         : '<span class="opt-thumb empty">' + (U.icon ? U.icon(x.icon) : '') + '</span>';
       return '<button type="button" class="opt ' + cls + '" data-exp="' + x.id + '" aria-pressed="false">' +
                thumb +
-               '<span class="opt-txt"><b>' + x.name + '</b><span>' + x.tag + ' · ' + x.games.length + ' titles</span></span>' +
-               '<span class="opt-price"><b>' + money(x.price) + '</b><span>' + per + '</span></span>' +
+               '<span class="opt-txt"><b>' + x.name + '</b><span>' + x.tag + ' · ' + x.games.length + ' titles' +
+                 (x.includes ? ' · ' + x.includes : '') + '</span></span>' +
+               '<span class="opt-price"><b>' + (x.tiers ? 'from ' : '') + money(x.price) + '</b><span>' + per + '</span></span>' +
              '</button>';
     }).join('');
 
@@ -137,6 +159,7 @@
       S.exp = A.experiences.filter(function (x) { return x.id === b.getAttribute('data-exp'); })[0];
       S.game = null;
       S.duration = S.exp.durations[0];
+      S.players = Math.min(S.players, maxPlayers());
       enableNext(1, true);
       render();
     });
@@ -254,13 +277,8 @@
     dateEl.disabled = isEvent;
 
     if (!isEvent) {
-      durEl.innerHTML = S.exp.durations.map(function (m) {
-        var blocks = Math.max(1, Math.round(m / S.exp.unit));
-        var per = S.exp.perRoom ? '' : ' / player';
-        return '<option value="' + m + '">' + label(m) + ' — ' + money(S.exp.price * blocks) + per + '</option>';
-      }).join('');
       if (!S.duration || S.exp.durations.indexOf(S.duration) === -1) S.duration = S.exp.durations[0];
-      durEl.value = String(S.duration);
+      fillDurations();
       buildSlots();
     }
 
@@ -271,15 +289,59 @@
       : (perRoom ? 'How many in your group?' : 'How many players?');
     $('#playersHint').textContent = isEvent
       ? 'Each entry is charged separately — ' + money(S.event.entry) + ' per person.'
-      : (perRoom ? 'The room price covers the whole group. This just tells us how many chairs to set out.'
-                 : 'Everyone in your group needs their own station for this session.');
+      : (S.exp.tiers ? 'Room price per hour: ' + tierList(S.exp) + '. Up to ' + maxPlayers() + ' people.' +
+                       (S.exp.includes ? ' ' + S.exp.includes + '.' : '')
+        : perRoom ? 'The room price covers the whole group. This just tells us how many chairs to set out.'
+                  : 'Everyone in your group needs their own station for this session.');
     $('#qOut').textContent = String(S.players);
+    updateSnacks();
+  }
 
-    function label(m) {
-      if (m < 60) return m + ' minutes';
-      var h = m / 60;
-      return (h % 1 ? h.toFixed(1) : h) + (h === 1 ? ' hour' : ' hours');
-    }
+  function tierList(x) {
+    var lo = 1;
+    return x.tiers.map(function (t) {
+      var txt = money(t.price) + ' for ' + lo + '–' + t.upTo + ' people';
+      lo = t.upTo + 1;
+      return txt;
+    }).join(', ');
+  }
+
+  function durLabel(m) {
+    if (m < 60) return m + ' minutes';
+    var h = m / 60;
+    return (h % 1 ? h.toFixed(1) : h) + (h === 1 ? ' hour' : ' hours');
+  }
+
+  /* session-length options, priced for the current group size */
+  function fillDurations() {
+    var durEl = $('#bDur');
+    var each = unitPrice(S.exp, S.players);
+    durEl.innerHTML = S.exp.durations.map(function (m) {
+      var blocks = Math.max(1, Math.round(m / S.exp.unit));
+      var per = S.exp.perRoom ? '' : ' / player';
+      return '<option value="' + m + '">' + durLabel(m) + ' — ' + money(each * blocks) + per + '</option>';
+    }).join('');
+    durEl.value = String(S.duration);
+  }
+
+  /* karaoke snack pre-order: only offered when the start is far enough away */
+  function updateSnacks() {
+    var box = $('#fSnacks');
+    var c = snackCfg();
+    if (!box) return;
+    box.hidden = !c;
+    if (!c) return;
+    var ok = snacksAllowed();
+    var hrs = Math.round((c.leadMinutes || 60) / 60);
+    var cb = $('#bSnacks');
+    cb.disabled = !ok;
+    if (!ok) cb.checked = false;
+    $('#snackDetail').hidden = !(ok && S.snacks);
+    $('#snackHint').textContent = ok ? (c.hint || '')
+      : (S.time ? 'Snacks must be pre-ordered at least ' + hrs + ' hour' + (hrs === 1 ? '' : 's') +
+                  ' before your session. Pick a later start time to add them.'
+                : 'Pick a start time first. Snacks must be ordered at least ' + hrs + ' hour' +
+                  (hrs === 1 ? '' : 's') + ' ahead.');
   }
 
   /* the opening window for a given yyyy-mm-dd, or null when we are closed */
@@ -422,6 +484,8 @@
     }
     rows.push([S.kind === 'event' ? 'Entries' : 'Players', String(S.players)]);
     if (BONUS && S.bonus) rows.push(['Bonus', BONUS.name + ' (free)']);
+    if (S.kind === 'experience' && S.exp && S.exp.includes) rows.push(['Included', S.exp.includes]);
+    if (wantsSnacks()) rows.push(['Snacks', S.snackNote.trim() || 'Pre-ordered, we will confirm']);
     if (S.name) rows.push(['Name', S.name]);
     if (S.phone) rows.push(['Phone', S.phone]);
     return rows;
@@ -520,6 +584,7 @@
     if (S.kind !== 'event') lines.push('Length: ' + S.duration + ' mins');
     lines.push((S.kind === 'event' ? 'Entries: ' : 'Players: ') + S.players);
     if (BONUS && S.bonus) lines.push('Bonus: ' + BONUS.name);
+    if (wantsSnacks()) lines.push('Snacks (pre-order): ' + (S.snackNote.trim() || 'yes, please confirm options'));
     if (S.area) lines.push('Coming from: ' + S.area);
     if (S.note) lines.push('Notes: ' + S.note);
     lines.push('Total: ' + money(p.total));
@@ -695,7 +760,9 @@
         customer: {
           name: S.name, phone: S.phone, email: S.email, area: S.area || ''
         },
-        note: [BONUS && S.bonus ? '[+ ' + BONUS.name + ']' : '', S.note || ''].join(' ').trim()
+        note: [BONUS && S.bonus ? '[+ ' + BONUS.name + ']' : '',
+               wantsSnacks() ? '[Snacks: ' + (S.snackNote.trim() || 'yes') + ']' : '',
+               S.note || ''].join(' ').trim()
     };
 
     try {
@@ -729,10 +796,10 @@
   });
 
   $('#bDate').addEventListener('change', function () {
-    S.date = this.value; buildSlots(); render();
+    S.date = this.value; buildSlots(); updateSnacks(); render();
   });
   $('#bDur').addEventListener('change', function () {
-    S.duration = +this.value; buildSlots(); render();
+    S.duration = +this.value; buildSlots(); updateSnacks(); render();
   });
   $('#slots').addEventListener('click', function (e) {
     var b = e.target.closest('[data-slot]');
@@ -741,16 +808,21 @@
     b.setAttribute('aria-pressed', 'true');
     S.time = b.getAttribute('data-slot');
     $('#fSlot').classList.remove('bad');
+    updateSnacks();
     render();
   });
 
   $('#qMinus').addEventListener('click', function () {
     S.players = Math.max(1, S.players - 1);
-    $('#qOut').textContent = String(S.players); render();
+    $('#qOut').textContent = String(S.players);
+    if (S.exp && S.exp.tiers) fillDurations();
+    render();
   });
   $('#qPlus').addEventListener('click', function () {
-    S.players = Math.min(A.booking.maxPlayers || 12, S.players + 1);
-    $('#qOut').textContent = String(S.players); render();
+    S.players = Math.min(maxPlayers(), S.players + 1);
+    $('#qOut').textContent = String(S.players);
+    if (S.exp && S.exp.tiers) fillDurations();
+    render();
   });
 
   var areaSel = $('#bArea');
@@ -785,6 +857,12 @@
     $('#bonusName').textContent = BONUS.name;
     $('#bonusHint').textContent = BONUS.hint || '';
     $('#bBonus').addEventListener('change', function () { S.bonus = this.checked; render(); });
+  }
+
+  // karaoke snack pre-order
+  if ($('#bSnacks')) {
+    $('#bSnacks').addEventListener('change', function () { S.snacks = this.checked; updateSnacks(); render(); });
+    $('#bSnackNote').addEventListener('input', function () { S.snackNote = this.value; render(); });
   }
 
   // wording for the last step, payment on vs off

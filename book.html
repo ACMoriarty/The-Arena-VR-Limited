@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Book to Play — The Arena VR, Benin City</title>
-<meta name="description" content="Book a session at The Arena VR, Benin City. Choose 360° VR, car racing, PS5, Meta Quest or karaoke, pick your date and time, and book in a minute.">
+<meta name="description" content="Book a session at The Arena VR, Benin City. Choose 360° VR, VR motorbike, car racing, PS5, Meta Quest or karaoke, pick your date and time, and book in a minute.">
 <meta name="theme-color" content="#0D0D0F">
 <meta name="robots" content="index,follow">
 <link rel="icon" href="assets/logo/favicon.png" type="image/png" sizes="512x512">
@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
 <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=13">
+<link rel="stylesheet" href="assets/css/style.css?v=14">
 </head>
 <body>
 
@@ -100,7 +100,7 @@
         <!-- ---------- STEP 1 ---------- -->
         <section class="fstep on" data-step="1">
           <h2>What are you playing?</h2>
-          <p class="lead">Five stations on the floor. Prices are per block — you choose the length next.</p>
+          <p class="lead">Six ways to play. Prices are per block — you choose the length next.</p>
           <div class="opts" id="expOpts"></div>
 
           <div class="opts-split" id="eventSplit">
@@ -164,6 +164,17 @@
               <span><b id="bonusName">Board games</b> <span class="bonus-free">Free bonus</span>
               <span class="hint" id="bonusHint"></span></span>
             </label>
+          </div>
+
+          <div class="field" style="margin-top:14px" id="fSnacks" hidden>
+            <label class="bonus-check" for="bSnacks">
+              <input type="checkbox" id="bSnacks">
+              <span><b>Pre-order snacks</b>
+              <span class="hint" id="snackHint"></span></span>
+            </label>
+            <div id="snackDetail" hidden>
+              <input type="text" id="bSnackNote" placeholder="e.g. 2 small chops platters, popcorn" aria-label="Which snacks would you like?">
+            </div>
           </div>
 
           <div class="fnav">
@@ -238,7 +249,7 @@
             <span>⚠</span>
             <span><b>Demo mode.</b> No Paystack key is set yet, so the payment step is simulated —
             you'll get a booking reference but no money moves. Add your public key in
-            <code>assets/js/arena.config.js?v=13</code> and set <code>demoMode: false</code> to go live.</span>
+            <code>assets/js/arena.config.js?v=14</code> and set <code>demoMode: false</code> to go live.</span>
           </div>
 
           <div class="fnav">
@@ -321,9 +332,9 @@
 <!-- Online payment is switched off (arena.config.js -> paystack.enabled).
      Put this line back when turning it on again:
 <script src="https://js.paystack.co/v1/inline.js"></script> -->
-<script src="assets/js/arena.config.js?v=13"></script>
-<script src="assets/js/arena.cloud.js?v=13"></script>
-<script src="assets/js/site.js?v=13"></script>
-<script src="assets/js/booking.js?v=13"></script>
+<script src="assets/js/arena.config.js?v=14"></script>
+<script src="assets/js/arena.cloud.js?v=14"></script>
+<script src="assets/js/site.js?v=14"></script>
+<script src="assets/js/booking.js?v=14"></script>
 </body>
 </html>

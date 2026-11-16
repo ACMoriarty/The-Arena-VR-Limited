@@ -132,9 +132,8 @@ window.ARENA = {
   /* ---------------------------------------------------------------------
      5. EXPERIENCES + GAME CATALOGUES
      ---------------------------------------------------------------------
-     ###  ALL PRICES BELOW ARE PLACEHOLDERS  ###
-     Replace `price` (naira, per person, per block of `unit` minutes) with
-     your real rate card. Add/remove games freely — the site rebuilds itself
+     `price` is naira per person, per block of `unit` minutes (or per room
+     when `perRoom` is true). `tiers` sets a price by group size instead. Add/remove games freely — the site rebuilds itself
      from this list.
      --------------------------------------------------------------------- */
   experiences: [
@@ -146,7 +145,7 @@ window.ARENA = {
       accent:'orange',
       blurb:'Step fully inside the game. Full-body tracking on our free-roam floor — walk, duck, aim and dodge in a world that surrounds you completely.',
       image:'assets/img/vr360.webp',
-      price:3000,          // ### PLACEHOLDER ###
+      price:4000,
       unit:15,             // minutes per block
       unitLabel:'15 mins',
       durations:[15,30,45,60],
@@ -175,7 +174,7 @@ window.ARENA = {
       /* ### TODO ### drop a photo at assets/img/racing.webp and put the path here.
          Empty for now, so the card shows the branded gradient. */
       image:'',
-      price:2500,          // ### PLACEHOLDER ###
+      price:3000,
       unit:15,
       unitLabel:'15 mins',
       durations:[15,30,45,60],
@@ -191,6 +190,25 @@ window.ARENA = {
       ]
     },
     {
+      id:'motorbike',
+      name:'VART VR Motorbike',
+      tag:'VR motion bike',
+      icon:'moto',
+      accent:'yellow',
+      blurb:'Headset on, throttle open. A VR motorbike that leans with you through every corner — the closest you’ll get to the track without the gravel rash.',
+      image:'assets/img/moto.webp',
+      price:4000,
+      unit:15,
+      unitLabel:'15 mins',
+      durations:[15,30,45,60],
+      games:[              // ### PLACEHOLDER ### — swap for the rides/tracks VART actually offers
+        'Street circuit',
+        'Mountain pass',
+        'Desert rally',
+        'Night highway'
+      ]
+    },
+    {
       id:'ps5',
       name:'PlayStation 5',
       tag:'Console',
@@ -198,7 +216,7 @@ window.ARENA = {
       accent:'blue',
       blurb:'Sofa, big screen, cold drink, controller in hand. Solo runs, split-screen grudge matches and everything in between.',
       image:'assets/img/ps5.webp',
-      price:2000,          // ### PLACEHOLDER ###
+      price:2000,
       unit:30,
       unitLabel:'30 mins',
       durations:[30,60,90,120],
@@ -227,7 +245,7 @@ window.ARENA = {
       /* ### TODO ### drop a photo at assets/img/quest.webp and put the path back
          here. Left empty for now, so the card falls back to the branded gradient. */
       image:'',
-      price:2500,          // ### PLACEHOLDER ###
+      price:3000,
       unit:15,
       unitLabel:'15 mins',
       durations:[15,30,45,60],
@@ -252,12 +270,25 @@ window.ARENA = {
       tag:'Sing',
       icon:'mic',
       accent:'yellow',
-      blurb:'Private room, real mics, a catalogue that runs from Afrobeats to power ballads. Bring the crew and embarrass yourselves properly.',
+      blurb:'Private room, real mics, a catalogue that runs from Afrobeats to power ballads. Water is on us — bring the crew and embarrass yourselves properly.',
       image:'assets/img/karaoke.webp',
-      price:5000,          // ### PLACEHOLDER ###  (room, not per head)
+      price:10000,         // lowest tier, shown as "from"
       unit:60,
       unitLabel:'1 hour',
       perRoom:true,        // priced per room rather than per player
+      /* Room price per hour by group size. */
+      tiers:[
+        { upTo:5,  price:10000 },   // 1–5 people
+        { upTo:10, price:15000 }    // 6–10 people
+      ],
+      maxPlayers:10,
+      includes:'Water included',
+      /* Snacks can be pre-ordered with the booking, but only when the session
+         starts at least `leadMinutes` from now. Priced separately. */
+      snacks:{
+        leadMinutes:60,
+        hint:'Tell us what you’d like and we’ll have it ready. Snacks are charged separately.'
+      },
       durations:[60,120,180],
       gamesLabel:'What are you singing?',
       gamesHint:'Pick the vibe for your session — our host cues up the playlist. You can always change your mind on the night.',
